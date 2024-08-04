@@ -1,0 +1,116 @@
+const { setupBrowser } = require("../setupBrowser/setupBrowser");
+const { takeInnerText } = require("../helpers/takeInnerText");
+const { countSiblings } = require("../helpers/countSiblings");
+const { build } = require("../helpers/build");
+const { listOfBuildings } = require("../helpers/listOfBuildings/listOfBuildings");
+const { goals, settings } = require("../settings");
+const { delay } = require("../utils/delay");
+
+async function buildManager() {
+  const { page } = await setupBrowser();
+
+  const {
+    linkGoToPageResources,
+    linkGoToDetailPageResources,
+    linkGetActualMetalMineLvl,
+    linkGetActualCrystalMineLvl,
+    linkGetActualDeuteriumMineLvl,
+    linkCheckIfQueingIsFull,
+    linkBuildMetalMine,
+    linkBuildCrystalMine,
+    linkBuildDeuteriumMine,
+  } = listOfBuildings;
+
+  const pageResources = await page.$(linkGoToPageResources);
+
+  // Przechodzę do podstrony resources a potem do informacji o budynku, aby pojawiły się ukryte dane, jak czas i potrzebne surowce
+  await pageResources.click();
+  await delay();
+
+  // Sprawdź czy kolejka budowania jest pusta
+  let isFreeQueing;
+
+  isFreeQueing = await checkQueing(
+    linkCheckIfQueingIsFull,
+    settings.resourcesAndFacilitiesBuidingsQueingToUpgrade
+  );
+
+  // Jeśli kolejka budowania jest pełna, wyjdź z funkcji
+  if (isFreeQueing) {
+    console.log("Kolejka budowania resources/facilities jest wolna!");
+  } else {
+    console.log("Kolejka budowania resources/facilities jest zajęta!");
+    return;
+  }
+
+  const pageDetailResources = await page.$(linkGoToDetailPageResources);
+  await pageDetailResources.click();
+  await delay();
+
+  const actualMetalMineLvl = await takeInnerText(linkGetActualMetalMineLvl);
+  const actualCrystalMineLvl = await takeInnerText(linkGetActualCrystalMineLvl);
+  const actualDeuteriumMineLvl = await takeInnerText(linkGetActualDeuteriumMineLvl);
+
+  console.log(
+    "actualMetalMineLvl:",
+    actualMetalMineLvl,
+    "; actualCrystalMineLvl:",
+    actualCrystalMineLvl,
+    "; actualDeuteriumMineLvl:",
+    actualDeuteriumMineLvl
+  );
+
+  // TODO zmienna isGoalAchieved powinna być chyba warunkiem podczas wywoływania funkcji? aby pominąć całą procedure przechodzenia do strony i pobierana elementów
+  // Zmienna do pętli while, jeśli cel nie jest spełniony, to nadal budować budynki
+  let isGoalAchieved = false;
+
+  // Sprawdź czy cel został spełniony
+  if (
+    goals.GoalForMetalMineLvl === linkGetActualMetalMineLvl &&
+    goals.GoalForCrystalMineLvl === linkGetActualCrystalMineLvl &&
+    goals.GoalForDeuteriumMineLvl === linkGetActualDeuteriumMineLvl
+  ) {
+    console.log("Cel wybudowanych poziomów budynków został spełniony!");
+    isGoalAchieved = true;
+  }
+
+  //TODO sprawdzić czy są surowce
+
+  console.log("Przed pętlą while isGoalAchieved: ", !isGoalAchieved, !isFreeQueing);
+
+  while (!isGoalAchieved && !isFreeQueing) {
+    console.log("while");
+
+    if (actualDeuteriumMineLvl < actualCrystalMineLvl - 1) {
+      console.log("!builddeuter", linkBuildDeuteriumMine);
+      await build(linkBuildDeuteriumMine);
+      return;
+    } else if (actualCrystalMineLvl < actualMetalMineLvl - 1) {
+      console.log("!buildcrystal", linkBuildCrystalMine);
+      await build(linkBuildCrystalMine);
+      return;
+    } else {
+      console.log("!buildmetal", linkBuildMetalMine);
+      await build(linkBuildMetalMine);
+      return;
+    }
+  }
+}
+
+async function checkQueing(link, setting) {
+  const numberInQueing = await countSiblings(link, setting);
+
+  console.log(
+    "checkQueing - numberInqueing: ",
+    numberInQueing,
+    numberInQueing == settings.maxResourcesAndFacilitiesBuidingsQueingToUpgrade
+  );
+
+  if (numberInQueing < settings.maxResourcesAndFacilitiesBuidingsQueingToUpgrade) {
+    return true;
+  }
+
+  return false;
+}
+
+module.exports = { buildManager };
