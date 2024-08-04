@@ -1,2 +1,4 @@
 node_modules/
 setupBrowser/
+package-lock.json
+.vscode/
