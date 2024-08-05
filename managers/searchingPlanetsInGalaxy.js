@@ -6,6 +6,7 @@ const { writeDataToFile } = require("../helpers/writeDataToFile");
 
 async function searchingPlanetsInGalaxy() {
   const { page } = await setupBrowser();
+  const maxNumberOfSystem = 499;
 
   if (page) {
     const galaxyPage = await page.$("a[href='/galaxy']");
@@ -26,7 +27,7 @@ async function searchingPlanetsInGalaxy() {
   const galaxyInputElement = await page.$(".galaxy-route #galaxyInput");
   const galaxyInputValue = await page.evaluate((input) => input.value, galaxyInputElement);
 
-  for (let i = 0; i < 31; i++) {
+  for (let i = 0; i < 500; i++) {
     try {
       let buttonToChangeSystem = await page.$("#btnSystemRight");
 
@@ -52,6 +53,10 @@ async function searchingPlanetsInGalaxy() {
 
       // Daje trochę dodatkowego czasu aby elementy DOM'u w pełni się załadowały
       await delay();
+
+      if (Number(systemInputValue) === maxNumberOfSystem) {
+        break;
+      }
     } catch (error) {
       console.error("Wystąpił błąd:", error);
     }
@@ -59,24 +64,6 @@ async function searchingPlanetsInGalaxy() {
 
   // Zapisz wyniki do pliku
   await writeDataToFile("data/farmCoordinates.json", arrayWithCoordinatesToInactivePlanets);
-
-  // try {
-  //   const filePath = "data/farmCoordinates.json";
-
-  //   const existingData = await fs.readFile(filePath, "utf8").catch(() => "[]");
-  //   const existingArray = JSON.parse(existingData);
-
-  //   // Połącz istniejące dane z nowymi
-  //   console.log("arrayWithCoordinatesToInactivePlanets::: ", arrayWithCoordinatesToInactivePlanets);
-  //   const updatedArray = existingArray.concat(arrayWithCoordinatesToInactivePlanets);
-
-  //   // Zapisz zaktualizowaną tablicę do pliku
-  //   await fs.writeFile(filePath, JSON.stringify(updatedArray, null, 2));
-
-  //   console.log("Dane zostały zapisane do pliku.");
-  // } catch (error) {
-  //   console.error("Wystąpił błąd podczas zapisu danych:", error);
-  // }
 }
 
 module.exports = { searchingPlanetsInGalaxy };

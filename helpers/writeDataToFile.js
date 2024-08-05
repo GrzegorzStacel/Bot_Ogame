@@ -1,14 +1,22 @@
+const fs = require("fs").promises;
+
 async function writeDataToFile(filePath, arraywithData) {
   try {
     const existingData = await fs.readFile(filePath, "utf8").catch(() => "[]");
     const existingArray = JSON.parse(existingData);
 
     // Połącz istniejące dane z nowymi
-    console.log("arrayWithCoordinatesToInactivePlanets::: ", arrayWithCoordinatesToInactivePlanets);
     let updatedArray = existingArray.concat(arraywithData);
 
-    // Dodaję 2x undefined, które odpowiadają za pozycję daty oraz flagi safe/danger. Te dane zostaną zaktualizowane o poprawne wartości w innej funkcji.
-    updatedArray.push(undefined, undefined);
+    // Dodaję 2x null, które odpowiadają za pozycję daty oraz flagi safe/danger. Te dane zostaną zaktualizowane o poprawne wartości w innej funkcji.
+    updatedArray = updatedArray.map((subArray) => {
+      if (Array.isArray(subArray)) {
+        while (subArray.length < 5) {
+          subArray.push(null);
+        }
+      }
+      return subArray;
+    });
 
     // Zapisz zaktualizowaną tablicę do pliku
     await fs.writeFile(filePath, JSON.stringify(updatedArray, null, 2));
