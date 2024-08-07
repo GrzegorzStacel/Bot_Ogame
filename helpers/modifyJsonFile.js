@@ -13,10 +13,21 @@ async function modifyJsonFile(filePathArg, indexActualArray, isSafe) {
 
     console.log(`Rozpoczynam modyfikowanie pliku JSON: ${jsonArray[indexActualArray]}`);
 
-    // Dodaj nową wartość do drugiej tablicy
+    // Sprawdź, czy tablica o podanym indeksie istnieje
     if (jsonArray.length > indexActualArray) {
-      jsonArray[indexActualArray].push(getFormattedActualDate());
-      jsonArray[indexActualArray].push(isSafe);
+      // Zaktualizuj wybraną tablicę
+      const targetArray = jsonArray[indexActualArray];
+
+      // Jeśli brak daty i flagi w tablicy, dodaj je
+      if (targetArray.length < 4 || targetArray[3] === null) {
+        targetArray[3] = getFormattedActualDate();
+      }
+      if (targetArray.length < 5 || targetArray[4] === null) {
+        targetArray[4] = isSafe;
+      }
+
+      // Zaktualizuj odpowiedni element w jsonArray
+      jsonArray[indexActualArray] = targetArray;
     } else {
       console.log(`Tablica nr ${indexActualArray} nie istnieje.`);
       return;
