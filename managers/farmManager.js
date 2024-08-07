@@ -29,7 +29,7 @@ async function farmManager() {
       const [galaxy, system, planet, date, isSafe] = coordinates;
 
       if (date !== actualDate) {
-        if (isSafe === undefined || isSafe === stringSafe) {
+        if (isSafe === null || isSafe === stringSafe) {
           // console.log("Ilość przeskanowanych planet: ", index);
           console.log(`${galaxy}:${system}:${planet} - Wysyłam 6000 sond szpiegowskich`);
 
