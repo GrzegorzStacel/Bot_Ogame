@@ -2,3 +2,4 @@ node_modules/
 setupBrowser/
 package-lock.json
 .vscode/
+data/farmCoordinates.json
