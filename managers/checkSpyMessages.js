@@ -94,6 +94,7 @@ async function checkSpyMessages(indexActualArray) {
                 cleanCoordinates[2]
               } - Za mało surowców aby się fatygować: ${sumOfAllResources.toLocaleString("pl-PL")}`
             );
+            // TODO sprawdzić czy to nie jest nierozbudowana planeta (sprawdzić lvl storage's)
             return;
           } else if (sumOfAllResources > 2000000000000) {
             numberOfAttacks = 6;
