@@ -63,9 +63,9 @@ export async function buildManager() {
 
   // Sprawdź czy cel został spełniony
   if (
-    goals.GoalForMetalMineLvl === linkGetActualMetalMineLvl &&
-    goals.GoalForCrystalMineLvl === linkGetActualCrystalMineLvl &&
-    goals.GoalForDeuteriumMineLvl === linkGetActualDeuteriumMineLvl
+    goals.GoalForMetalMineLvl === Number(linkGetActualMetalMineLvl) &&
+    goals.GoalForCrystalMineLvl === Number(linkGetActualCrystalMineLvl) &&
+    goals.GoalForDeuteriumMineLvl === Number(linkGetActualDeuteriumMineLvl)
   ) {
     console.log("Cel wybudowanych poziomów budynków został spełniony!");
     isGoalAchieved = true;
