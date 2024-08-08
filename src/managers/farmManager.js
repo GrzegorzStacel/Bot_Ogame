@@ -3,12 +3,12 @@ import puppeteer from "puppeteer";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import { importantStrings } from "../settings.js";
+import { importantStrings } from "../data/settings.js";
 import { sendFleet } from "./sendFleet.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
 import farmCoordinates from "../data/farmCoordinates.json" assert { type: "json" };
 import { checkSpyMessages } from "./checkSpyMessages.js";
-import { delay } from "../utils/delay.js";
+import { delay } from "../../utils/delay.js";
 import { getFormattedActualDate } from "../helpers/getFormattedActualDate.js";
 
 export async function farmManager() {

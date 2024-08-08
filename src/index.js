@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 import { setupBrowser } from "./setupBrowser/setupBrowser.js";
-import { bonus } from "./bonus.js";
-import { promoteSerwer } from "./promoteSerwer.js";
+import { bonus } from "./managers/bonus.js";
+import { promoteSerwer } from "./managers/promoteSerwer.js";
 import { delay } from "./utils/delay.js";
 import { build } from "./helpers/build.js";
 import { listOfBuildings } from "./data/listOfBuildings.js";

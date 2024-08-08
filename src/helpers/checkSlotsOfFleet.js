@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { takeInnerText } from "./takeInnerText.js";
-import { delay } from "../utils/delay.js";
+import { delay } from "../../utils/delay.js";
 
 export async function checkSlotsOfFleet(needFreeNumberOfSlots) {
   console.log("checkSlotsOfFleet.js - needFreeNumberOfSlots::: ", needFreeNumberOfSlots);

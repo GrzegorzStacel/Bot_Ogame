@@ -3,8 +3,8 @@ import { takeInnerText } from "../helpers/takeInnerText.js";
 import { countSiblings } from "../helpers/countSiblings.js";
 import { build } from "../helpers/build.js";
 import { listOfBuildings } from "../data/listOfBuildings.js";
-import { goals, settings } from "../settings.js";
-import { delay } from "../utils/delay.js";
+import { goals, settings } from "../data/settings.js";
+import { delay } from "../../utils/delay.js";
 
 export async function buildManager() {
   const { page } = await setupBrowser();

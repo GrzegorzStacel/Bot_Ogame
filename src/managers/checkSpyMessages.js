@@ -1,9 +1,9 @@
 import puppeteer from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import fs from "fs/promises";
-import { importantStrings } from "../settings.js";
+import { importantStrings } from "../data/settings.js";
 import { takeInnerText } from "../helpers/takeInnerText.js";
-import { delay } from "../utils/delay.js";
+import { delay } from "../../utils/delay.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
 import { sendFleet } from "./sendFleet.js";
 import { checkSlotsOfFleet } from "../helpers/checkSlotsOfFleet.js";

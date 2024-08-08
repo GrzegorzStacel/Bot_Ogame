@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
-import { delay } from "../utils/delay.js";
+import { delay } from "../../utils/delay.js";
 import { takeInnerText } from "../helpers/takeInnerText.js";
 import { getStringAndConvertTimeToMilliseconds } from "../helpers/getStringAndConvertTimeToMilliseconds.js";
 

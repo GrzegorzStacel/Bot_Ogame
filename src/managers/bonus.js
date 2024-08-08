@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 import { setupBrowser } from "./setupBrowser/setupBrowser.js";
 import { delay } from "./utils/delay.js";
-import { takeInnerText } from "./helpers/takeInnerText.js";
+import { takeInnerText } from "../helpers/takeInnerText.js";
 
 export async function bonus() {
   const { page } = await setupBrowser();

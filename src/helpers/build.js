@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
-import { delay } from "../utils/delay.js";
+import { delay } from "../../utils/delay.js";
 
 export async function build(building) {
   const { page } = await setupBrowser();
