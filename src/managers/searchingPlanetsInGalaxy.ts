@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import fs from "fs/promises";
-import { delay } from "../../utils/delay.js";
+import { delay } from "../utils/delay.js";
 import { writeDataToFile } from "../helpers/writeDataToFile.js";
 
 export async function searchingPlanetsInGalaxy() {
