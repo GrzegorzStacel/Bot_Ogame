@@ -30,7 +30,7 @@ export async function buildManager() {
   // Sprawdź czy kolejka budowania jest pusta
   let isFreeQueing;
 
-  isFreeQueing = await checkQueing(linkCheckIfQueingIsFull, settings.resourcesAndFacilitiesBuidingsQueingToUpgrade);
+  isFreeQueing = await checkQueing(linkCheckIfQueingIsFull);
 
   // Jeśli kolejka budowania jest pełna, wyjdź z funkcji
   if (isFreeQueing) {
@@ -94,8 +94,8 @@ export async function buildManager() {
   }
 }
 
-async function checkQueing(link, setting) {
-  const numberInQueing = await countSiblings(link, setting);
+async function checkQueing(link) {
+  const numberInQueing = await countSiblings(link);
 
   console.log("checkQueing - numberInqueing: ", numberInQueing, numberInQueing == settings.maxResourcesAndFacilitiesBuidingsQueingToUpgrade);
 
