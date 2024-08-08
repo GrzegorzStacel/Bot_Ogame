@@ -7,9 +7,10 @@ import { writeDataToFile } from "../helpers/writeDataToFile.js";
 export async function searchingPlanetsInGalaxy() {
   const { page } = await setupBrowser();
   const maxNumberOfSystem = 499;
+  let galaxyPage;
 
   if (page) {
-    const galaxyPage = await page.$("a[href='/galaxy']");
+    galaxyPage = await page.$("a[href='/galaxy']");
     const navigationPromise = page.waitForNavigation();
 
     await galaxyPage.click();

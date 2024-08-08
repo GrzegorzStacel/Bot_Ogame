@@ -6,11 +6,13 @@ import { getStringAndConvertTimeToMilliseconds } from "../helpers/getStringAndCo
 
 // mission = "Attack", "Spy"
 export async function sendFleet(shipElement, amount, numberOfgalaxy, numberOfSystem, numberOfPlanet, mission) {
+  let fleetPage;
+
   try {
     const { page } = await setupBrowser();
 
     if (page) {
-      const fleetPage = await page.$("a[href='/fleet']");
+      fleetPage = await page.$("a[href='/fleet']");
       const navigationPromise = page.waitForNavigation();
 
       await fleetPage.click();
