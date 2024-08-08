@@ -1,9 +1,13 @@
 import fs from "fs";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import { getFormattedActualDate } from "./getFormattedActualDate.js";
 
 export async function modifyJsonFile(filePathArg, indexActualArray, isSafe) {
   try {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+
     // Ścieżka do pliku JSON
     const filePath = path.join(__dirname, filePathArg);
 
