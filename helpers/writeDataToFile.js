@@ -1,6 +1,6 @@
-const fs = require("fs").promises;
+import fs from "fs/promises";
 
-async function writeDataToFile(filePath, arraywithData) {
+export async function writeDataToFile(filePath, arraywithData) {
   try {
     const existingData = await fs.readFile(filePath, "utf8").catch(() => "[]");
     const existingArray = JSON.parse(existingData);
@@ -50,5 +50,3 @@ async function writeDataToFile(filePath, arraywithData) {
     console.error("Wystąpił błąd podczas zapisu danych w writeDataToFile.js:", error);
   }
 }
-
-module.exports = { writeDataToFile };

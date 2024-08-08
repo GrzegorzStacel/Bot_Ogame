@@ -1,22 +1,22 @@
-const puppeteer = require("puppeteer");
-const { setupBrowser } = require("../setupBrowser/setupBrowser");
-const fs = require("fs").promises;
-const { importantStrings } = require("../settings");
-const { takeInnerText } = require("../helpers/takeInnerText");
-const { delay } = require("../utils/delay");
-const { fleetStatistics } = require("../data/fleetStatistics");
-const { sendFleet } = require("./sendFleet");
-const { checkSlotsOfFleet } = require("../helpers/checkSlotsOfFleet");
-const { modifyJsonFile } = require("../helpers/modifyJsonFile");
+import puppeteer from "puppeteer";
+import { setupBrowser } from "../setupBrowser/setupBrowser.js";
+import fs from "fs/promises";
+import { importantStrings } from "../settings.js";
+import { takeInnerText } from "../helpers/takeInnerText.js";
+import { delay } from "../utils/delay.js";
+import { fleetStatistics } from "../data/fleetStatistics.js";
+import { sendFleet } from "./sendFleet.js";
+import { checkSlotsOfFleet } from "../helpers/checkSlotsOfFleet.js";
+import { modifyJsonFile } from "../helpers/modifyJsonFile.js";
 
-async function checkSpyMessages(indexActualArray) {
+export async function checkSpyMessages(indexActualArray) {
   try {
     const { page } = await setupBrowser();
     // TODO Sprawdzić czy sondy nie zostały zniszczone
     let isDone = true;
     let amountOfSpyProbe = 100;
     let cleanCoordinates;
-    isThereDangerOnThePlanet = false;
+    let isThereDangerOnThePlanet = false;
     const { stringSpy, stringAttack, stringDanger, stringSafe } = importantStrings;
 
     while (isDone) {
@@ -147,8 +147,6 @@ async function checkSpyMessages(indexActualArray) {
     return;
   }
 }
-
-module.exports = { checkSpyMessages };
 
 async function takeNextSiblingText(element, page) {
   const resource = await page.evaluate((img) => {

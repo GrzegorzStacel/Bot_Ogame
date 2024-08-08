@@ -1,9 +1,9 @@
-const puppeteer = require("puppeteer");
-const { setupBrowser } = require("./setupBrowser/setupBrowser");
-const { delay } = require("./utils/delay");
-const { takeInnerText } = require("./helpers/takeInnerText");
+import puppeteer from "puppeteer";
+import { setupBrowser } from "./setupBrowser/setupBrowser.js";
+import { delay } from "./utils/delay.js";
+import { takeInnerText } from "./helpers/takeInnerText.js";
 
-async function bonus() {
+export async function bonus() {
   const { page } = await setupBrowser();
 
   // TODO jeśli można głosować - uruchomić sygnał dźwiękowy
@@ -25,5 +25,3 @@ async function bonus() {
 
   await delay(3000);
 }
-
-module.exports = { bonus };

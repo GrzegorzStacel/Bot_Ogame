@@ -1,10 +1,10 @@
-const puppeteer = require("puppeteer");
-const { setupBrowser } = require("../setupBrowser/setupBrowser");
-const fs = require("fs").promises;
-const { delay } = require("../utils/delay");
-const { writeDataToFile } = require("../helpers/writeDataToFile");
+import puppeteer from "puppeteer";
+import { setupBrowser } from "../setupBrowser/setupBrowser.js";
+import fs from "fs/promises";
+import { delay } from "../utils/delay.js";
+import { writeDataToFile } from "../helpers/writeDataToFile.js";
 
-async function searchingPlanetsInGalaxy() {
+export async function searchingPlanetsInGalaxy() {
   const { page } = await setupBrowser();
   const maxNumberOfSystem = 499;
 
@@ -65,8 +65,6 @@ async function searchingPlanetsInGalaxy() {
   // Zapisz wyniki do pliku
   await writeDataToFile("data/farmCoordinates.json", arrayWithCoordinatesToInactivePlanets);
 }
-
-module.exports = { searchingPlanetsInGalaxy };
 
 function addCoordinatesToArray(array, galaxy, system, position) {
   // Tworzymy tablicę z trzema wartościami

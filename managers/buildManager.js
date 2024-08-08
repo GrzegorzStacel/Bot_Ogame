@@ -1,12 +1,12 @@
-const { setupBrowser } = require("../setupBrowser/setupBrowser");
-const { takeInnerText } = require("../helpers/takeInnerText");
-const { countSiblings } = require("../helpers/countSiblings");
-const { build } = require("../helpers/build");
-const { listOfBuildings } = require("../helpers/listOfBuildings/listOfBuildings");
-const { goals, settings } = require("../settings");
-const { delay } = require("../utils/delay");
+import { setupBrowser } from "../setupBrowser/setupBrowser.js";
+import { takeInnerText } from "../helpers/takeInnerText.js";
+import { countSiblings } from "../helpers/countSiblings.js";
+import { build } from "../helpers/build.js";
+import { listOfBuildings } from "../data/listOfBuildings.js";
+import { goals, settings } from "../settings.js";
+import { delay } from "../utils/delay.js";
 
-async function buildManager() {
+export async function buildManager() {
   const { page } = await setupBrowser();
 
   const {
@@ -30,10 +30,7 @@ async function buildManager() {
   // Sprawdź czy kolejka budowania jest pusta
   let isFreeQueing;
 
-  isFreeQueing = await checkQueing(
-    linkCheckIfQueingIsFull,
-    settings.resourcesAndFacilitiesBuidingsQueingToUpgrade
-  );
+  isFreeQueing = await checkQueing(linkCheckIfQueingIsFull, settings.resourcesAndFacilitiesBuidingsQueingToUpgrade);
 
   // Jeśli kolejka budowania jest pełna, wyjdź z funkcji
   if (isFreeQueing) {
@@ -100,11 +97,7 @@ async function buildManager() {
 async function checkQueing(link, setting) {
   const numberInQueing = await countSiblings(link, setting);
 
-  console.log(
-    "checkQueing - numberInqueing: ",
-    numberInQueing,
-    numberInQueing == settings.maxResourcesAndFacilitiesBuidingsQueingToUpgrade
-  );
+  console.log("checkQueing - numberInqueing: ", numberInQueing, numberInQueing == settings.maxResourcesAndFacilitiesBuidingsQueingToUpgrade);
 
   if (numberInQueing < settings.maxResourcesAndFacilitiesBuidingsQueingToUpgrade) {
     return true;
@@ -112,5 +105,3 @@ async function checkQueing(link, setting) {
 
   return false;
 }
-
-module.exports = { buildManager };

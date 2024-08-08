@@ -1,20 +1,25 @@
-const puppeteer = require("puppeteer");
-// const { setupBrowser } = require("../setupBrowser/setupBrowser");
-const fs = require("fs").promises;
-const path = require("path");
-const { importantStrings } = require("../settings");
-const { sendFleet } = require("./sendFleet");
-const { fleetStatistics } = require("../data/fleetStatistics");
-const { farmCoordinates } = require("../data/farmCoordinates");
-const { checkSpyMessages } = require("./checkSpyMessages");
-const { delay } = require("../utils/delay");
-const { getFormattedActualDate } = require("../helpers/getFormattedActualDate");
+import puppeteer from "puppeteer";
+// import { setupBrowser } from "../setupBrowser/setupBrowser.js";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+import { importantStrings } from "../settings.js";
+import { sendFleet } from "./sendFleet.js";
+import { fleetStatistics } from "../data/fleetStatistics.js";
+import farmCoordinates from "../data/farmCoordinates.json" assert { type: "json" };
+import { checkSpyMessages } from "./checkSpyMessages.js";
+import { delay } from "../utils/delay.js";
+import { getFormattedActualDate } from "../helpers/getFormattedActualDate.js";
 
-async function farmManager() {
+export async function farmManager() {
   // const { page } = await setupBrowser();
   const { link_SPY_PROBE } = fleetStatistics;
   const actualDate = getFormattedActualDate();
   const { stringSafe, stringDanger, stringSpy } = importantStrings;
+
+  // Uzyskanie ścieżki do katalogu roboczego
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
 
   // Ścieżka do pliku
   const filePath = path.join(__dirname, "../data/farmCoordinates.json");
@@ -55,5 +60,3 @@ async function farmManager() {
     console.error("Błąd w farmManager.js: ", error);
   }
 }
-
-module.exports = { farmManager };

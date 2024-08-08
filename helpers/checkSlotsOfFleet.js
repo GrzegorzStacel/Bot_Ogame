@@ -1,9 +1,9 @@
-const puppeteer = require("puppeteer");
-const { setupBrowser } = require("../setupBrowser/setupBrowser");
-const { takeInnerText } = require("./takeInnerText");
-const { delay } = require("../utils/delay");
+import puppeteer from "puppeteer";
+import { setupBrowser } from "../setupBrowser/setupBrowser.js";
+import { takeInnerText } from "./takeInnerText.js";
+import { delay } from "../utils/delay.js";
 
-async function checkSlotsOfFleet(needFreeNumberOfSlots) {
+export async function checkSlotsOfFleet(needFreeNumberOfSlots) {
   console.log("checkSlotsOfFleet.js - needFreeNumberOfSlots::: ", needFreeNumberOfSlots);
   const { page } = await setupBrowser();
 
@@ -57,8 +57,6 @@ async function checkSlotsOfFleet(needFreeNumberOfSlots) {
     console.error("Błąd w checkSlotsOfFleet.js: ", error);
   }
 }
-
-module.exports = { checkSlotsOfFleet };
 
 async function getRemainingSeconds(page, needFreeNumberOfSlots) {
   // Ustal poprawny indeks, zakładając, że `needFreeNumberOfSlots` to liczba

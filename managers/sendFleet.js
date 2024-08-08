@@ -1,11 +1,11 @@
-const puppeteer = require("puppeteer");
-const { setupBrowser } = require("../setupBrowser/setupBrowser");
-const { delay } = require("../utils/delay");
-const { takeInnerText } = require("../helpers/takeInnerText");
-const { getStringAndConvertTimeToMilliseconds } = require("../helpers/getStringAndConvertTimeToMilliseconds");
+import puppeteer from "puppeteer";
+import { setupBrowser } from "../setupBrowser/setupBrowser.js";
+import { delay } from "../utils/delay.js";
+import { takeInnerText } from "../helpers/takeInnerText.js";
+import { getStringAndConvertTimeToMilliseconds } from "../helpers/getStringAndConvertTimeToMilliseconds.js";
 
 // mission = "Attack", "Spy"
-async function sendFleet(shipElement, amount, numberOfgalaxy, numberOfSystem, numberOfPlanet, mission) {
+export async function sendFleet(shipElement, amount, numberOfgalaxy, numberOfSystem, numberOfPlanet, mission) {
   try {
     const { page } = await setupBrowser();
 
@@ -89,8 +89,6 @@ async function sendFleet(shipElement, amount, numberOfgalaxy, numberOfSystem, nu
     return;
   }
 }
-
-module.exports = { sendFleet };
 
 async function setValueInInput(element, value, page) {
   await page.evaluate(

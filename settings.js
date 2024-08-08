@@ -1,20 +1,18 @@
-const goals = {
+export const goals = {
   GoalForMetalMineLvl: 80,
   GoalForCrystalMineLvl: 75,
   GoalForDeuteriumMineLvl: 70,
 };
 
-const settings = {
+export const settings = {
   maxResourcesAndFacilitiesBuidingsQueingToUpgrade: 15,
   maxResearchTechnologyQueingToUpgrade: 5,
   maxShipyardAndDefenseBuildingsQueingToUpgrade: 15,
 };
 
-const importantStrings = {
+export const importantStrings = {
   stringSafe: "safe",
   stringDanger: "danger",
   stringSpy: "Spy",
   stringAttack: "Attack",
 };
-
-module.exports = { goals, settings, importantStrings };

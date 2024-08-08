@@ -1,7 +1,7 @@
-const puppeteer = require("puppeteer");
-const { delay } = require("./utils/delay");
+import puppeteer from "puppeteer";
+import { delay } from "./utils/delay.js";
 
-async function promoteSerwer(LeftMenu, page, browser, index) {
+export async function promoteSerwer(LeftMenu, page, browser, index) {
   try {
     //TODO sprawdzić, kod był w bonus.js
     // const isAvailable = await page.$(".x-vote-time");
@@ -27,13 +27,9 @@ async function promoteSerwer(LeftMenu, page, browser, index) {
 
     await delay();
 
-    const section = await page.$(
-      `.promote-section > :nth-child(${index}) .provider-vote`
-    );
+    const section = await page.$(`.promote-section > :nth-child(${index}) .provider-vote`);
     if (!section) {
-      console.log(
-        `Nie znaleziono pomocyjnego elementu '.provider-vote', dziecka nr ${index}, wychodzę z funkcji.`
-      );
+      console.log(`Nie znaleziono pomocyjnego elementu '.provider-vote', dziecka nr ${index}, wychodzę z funkcji.`);
       return;
     }
 
@@ -92,5 +88,3 @@ function addTimeToCurrentTime(timeString) {
   // Zwrócenie nowego czasu
   return newTime;
 }
-
-module.exports = { promoteSerwer };

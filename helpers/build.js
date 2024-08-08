@@ -1,8 +1,8 @@
-const puppeteer = require("puppeteer");
-const { setupBrowser } = require("../setupBrowser/setupBrowser");
-const { delay } = require("../utils/delay");
+import puppeteer from "puppeteer";
+import { setupBrowser } from "../setupBrowser/setupBrowser.js";
+import { delay } from "../utils/delay.js";
 
-async function build(building) {
+export async function build(building) {
   const { page } = await setupBrowser();
 
   try {
@@ -22,5 +22,3 @@ async function build(building) {
 
   return;
 }
-
-module.exports = { build };
