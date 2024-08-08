@@ -1,4 +1,3 @@
-import puppeteer from "puppeteer";
 // import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import fs from "fs/promises";
 import path from "path";
@@ -8,7 +7,7 @@ import { sendFleet } from "./sendFleet.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
 import farmCoordinates from "../data/farmCoordinates.json" assert { type: "json" };
 import { checkSpyMessages } from "./checkSpyMessages.js";
-import { delay } from "../../utils/delay.js";
+import { delay } from "../utils/delay.js";
 import { getFormattedActualDate } from "../helpers/getFormattedActualDate.js";
 
 export async function farmManager() {

@@ -1,4 +1,3 @@
-import puppeteer from "puppeteer";
 import { setupBrowser } from "./setupBrowser/setupBrowser.js";
 import { bonus } from "./managers/bonus.js";
 import { promoteSerwer } from "./managers/promoteSerwer.js";
