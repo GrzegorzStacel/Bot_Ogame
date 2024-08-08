@@ -1,8 +1,8 @@
-const fs = require("fs");
-const path = require("path");
-const { getFormattedActualDate } = require("./getFormattedActualDate");
+import fs from "fs";
+import path from "path";
+import { getFormattedActualDate } from "./getFormattedActualDate.js";
 
-async function modifyJsonFile(filePathArg, indexActualArray, isSafe) {
+export async function modifyJsonFile(filePathArg, indexActualArray, isSafe) {
   try {
     // Ścieżka do pliku JSON
     const filePath = path.join(__dirname, filePathArg);
@@ -41,5 +41,3 @@ async function modifyJsonFile(filePathArg, indexActualArray, isSafe) {
     console.error("Wystąpił błąd podczas modyfikowania pliku JSON w modifyJsonFile.js:", error);
   }
 }
-
-module.exports = { modifyJsonFile };

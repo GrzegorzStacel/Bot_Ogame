@@ -1,16 +1,16 @@
-const puppeteer = require("puppeteer");
-const { setupBrowser } = require("./setupBrowser/setupBrowser");
-const { bonus } = require("./bonus");
-const { promoteSerwer } = require("./promoteSerwer");
-const { delay } = require("./utils/delay");
-const { build } = require("./helpers/build");
-const buildings = require("./helpers/listOfBuildings/listOfBuildings");
-const { takeInnerText } = require("./helpers/takeInnerText");
-const { buildManager } = require("./managers/buildManager");
-const { checkSpyMessages } = require("./managers/checkSpyMessages");
-const { searchingPlanetsInGalaxy } = require("./managers/searchingPlanetsInGalaxy");
-const { farmManager } = require("./managers/farmManager");
-const { checkSlotsOfFleet } = require("./helpers/checkSlotsOfFleet");
+import puppeteer from "puppeteer";
+import { setupBrowser } from "./setupBrowser/setupBrowser.js";
+import { bonus } from "./bonus.js";
+import { promoteSerwer } from "./promoteSerwer.js";
+import { delay } from "./utils/delay.js";
+import { build } from "./helpers/build.js";
+import { listOfBuildings } from "./data/listOfBuildings.js";
+import { takeInnerText } from "./helpers/takeInnerText.js";
+import { buildManager } from "./managers/buildManager.js";
+import { checkSpyMessages } from "./managers/checkSpyMessages.js";
+import { searchingPlanetsInGalaxy } from "./managers/searchingPlanetsInGalaxy.js";
+import { farmManager } from "./managers/farmManager.js";
+import { checkSlotsOfFleet } from "./helpers/checkSlotsOfFleet.js";
 
 (async () => {
   await setupBrowser();

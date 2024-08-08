@@ -1,7 +1,7 @@
-const { setupBrowser } = require("../setupBrowser/setupBrowser");
+import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 
 // Element musi być stringiem!
-async function takeInnerText(element, isSlice = false) {
+export async function takeInnerText(element, isSlice = false) {
   const { page } = await setupBrowser();
 
   try {
@@ -31,8 +31,4 @@ async function takeInnerText(element, isSlice = false) {
     console.error("Błąd w pliku takeInnerText.js: ", error);
     throw error;
   }
-
-  return null;
 }
-
-module.exports = { takeInnerText };

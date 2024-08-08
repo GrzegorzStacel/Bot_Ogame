@@ -1,7 +1,7 @@
-const puppeteer = require("puppeteer");
-const { setupBrowser } = require("../setupBrowser/setupBrowser");
+import puppeteer from "puppeteer";
+import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 
-async function getChildrenCount(parentSelector) {
+export async function getChildrenCount(parentSelector) {
   const { page } = await setupBrowser();
 
   return await page.evaluate((selector) => {
@@ -14,5 +14,3 @@ async function getChildrenCount(parentSelector) {
     }
   }, parentSelector);
 }
-
-module.exports = { getChildrenCount };

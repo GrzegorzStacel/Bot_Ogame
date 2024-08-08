@@ -1,5 +1,5 @@
 // Zwraca zmięnną typu string w formacie np. 21-03-2024
-function getFormattedActualDate() {
+export function getFormattedActualDate() {
   const currentDate = new Date();
 
   // Pobranie dnia, miesiąca i roku
@@ -12,5 +12,3 @@ function getFormattedActualDate() {
 
   return formattedDate;
 }
-
-module.exports = { getFormattedActualDate };
