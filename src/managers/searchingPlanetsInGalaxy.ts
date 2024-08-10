@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import puppeteer, { ElementHandle, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import fs from "fs/promises";
 import { delay } from "../utils/delay.js";
@@ -7,11 +7,11 @@ import { writeDataToFile } from "../helpers/writeDataToFile.js";
 export async function searchingPlanetsInGalaxy() {
   const { page } = await setupBrowser();
   const maxNumberOfSystem = 499;
-  let galaxyPage;
+  let galaxyPage: ElementHandle<HTMLAnchorElement>;
 
   if (page) {
     galaxyPage = await page.$("a[href='/galaxy']");
-    const navigationPromise = page.waitForNavigation();
+    const navigationPromise: Promise<HTTPResponse> = page.waitForNavigation();
 
     await galaxyPage.click();
 
@@ -23,22 +23,22 @@ export async function searchingPlanetsInGalaxy() {
     return;
   }
 
-  let arrayWithCoordinatesToInactivePlanets = [];
+  let arrayWithCoordinatesToInactivePlanets: [string, string, string][] = [];
 
-  const galaxyInputElement = await page.$(".galaxy-route #galaxyInput");
-  const galaxyInputValue = await page.evaluate((input) => input.value, galaxyInputElement);
+  const galaxyInputElement: ElementHandle<Element> = await page.$(".galaxy-route #galaxyInput");
+  const galaxyInputValue: string = await page.evaluate((input: HTMLInputElement) => input.value, galaxyInputElement);
 
   for (let i = 0; i < 500; i++) {
     try {
-      let buttonToChangeSystem = await page.$("#btnSystemRight");
+      let buttonToChangeSystem: ElementHandle<Element> = await page.$("#btnSystemRight");
 
-      let systemInputElement = await page.$("#systemInput");
-      let systemInputValue = await page.evaluate((input) => input.value, systemInputElement);
+      let systemInputElement: ElementHandle<Element> = await page.$("#systemInput");
+      let systemInputValue: string = await page.evaluate((input: HTMLInputElement) => input.value, systemInputElement);
 
-      let planetsPositionElement = await page.$$(".galaxy-info .filterInactive .col-planet-index span");
+      let planetsPositionElement: ElementHandle<HTMLSpanElement>[] = await page.$$(".galaxy-info .filterInactive .col-planet-index span");
 
       for (let element of planetsPositionElement) {
-        const planetPositionText = await page.evaluate((el) => el.innerText, element);
+        const planetPositionText: string = await page.evaluate((el: HTMLSpanElement) => el.innerText, element);
 
         // Dodanie obecnej rundy do głównej tablicy
         addCoordinatesToArray(arrayWithCoordinatesToInactivePlanets, galaxyInputValue, systemInputValue, planetPositionText);
@@ -67,7 +67,7 @@ export async function searchingPlanetsInGalaxy() {
   await writeDataToFile("data/farmCoordinates.json", arrayWithCoordinatesToInactivePlanets);
 }
 
-function addCoordinatesToArray(array, galaxy, system, position) {
+function addCoordinatesToArray(array: string[][], galaxy: string, system: string, position: string) {
   // Tworzymy tablicę z trzema wartościami
   const coordinates = [galaxy, system, position];
 
@@ -76,6 +76,6 @@ function addCoordinatesToArray(array, galaxy, system, position) {
   console.log("coordinates::: ", coordinates);
 }
 
-function getRandomNumber(min, max) {
+function getRandomNumber(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

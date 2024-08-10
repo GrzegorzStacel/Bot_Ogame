@@ -1,4 +1,4 @@
-export function getStringAndConvertTimeToMilliseconds(timeStr) {
+export function getStringAndConvertTimeToMilliseconds(timeStr: string) {
   if (timeStr === null || timeStr === undefined) {
     throw new Error("Ciąg wejściowy nie może być null lub undefined");
   }

@@ -5,6 +5,7 @@ import { build } from "../helpers/build.js";
 import { listOfBuildings } from "../data/listOfBuildings.js";
 import { goals, settings } from "../data/settings.js";
 import { delay } from "../utils/delay.js";
+import { ElementHandle } from "puppeteer";
 
 export async function buildManager() {
   const { page } = await setupBrowser();
@@ -21,7 +22,7 @@ export async function buildManager() {
     linkBuildDeuteriumMine,
   } = listOfBuildings;
 
-  const pageResources = await page.$(linkGoToPageResources);
+  const pageResources: ElementHandle<Element> = await page.$(linkGoToPageResources);
 
   // Przechodzę do podstrony resources a potem do informacji o budynku, aby pojawiły się ukryte dane, jak czas i potrzebne surowce
   await pageResources.click();
@@ -44,9 +45,9 @@ export async function buildManager() {
   await pageDetailResources.click();
   await delay();
 
-  const actualMetalMineLvl = await takeInnerText(linkGetActualMetalMineLvl);
-  const actualCrystalMineLvl = await takeInnerText(linkGetActualCrystalMineLvl);
-  const actualDeuteriumMineLvl = await takeInnerText(linkGetActualDeuteriumMineLvl);
+  const actualMetalMineLvl = Number(await takeInnerText(linkGetActualMetalMineLvl));
+  const actualCrystalMineLvl = Number(await takeInnerText(linkGetActualCrystalMineLvl));
+  const actualDeuteriumMineLvl = Number(await takeInnerText(linkGetActualDeuteriumMineLvl));
 
   console.log(
     "actualMetalMineLvl:",

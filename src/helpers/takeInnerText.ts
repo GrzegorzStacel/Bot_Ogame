@@ -1,7 +1,8 @@
+import { ElementHandle } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 
 // Element musi być stringiem!
-export async function takeInnerText(element, isSlice = false) {
+export async function takeInnerText(element: string, isSlice: boolean = false) {
   const { page } = await setupBrowser();
 
   try {
@@ -10,15 +11,14 @@ export async function takeInnerText(element, isSlice = false) {
       throw new TypeError("'Element' musi być typu string");
     }
 
-    const serchingElement = await page.$(element);
+    const serchingElement: ElementHandle | null = await page.$(element);
 
     if (!serchingElement) {
       console.log("Brak elementu serchingElement: ", serchingElement);
       return null;
     }
 
-    const text = await page.evaluate((el) => el.innerText, serchingElement);
-    // console.log("text::: ", text);
+    const text: string = await page.evaluate((el: HTMLElement) => el.innerText, serchingElement);
 
     if (isSlice) {
       // Wyciągnięcie ostatnich dwóch znaków, ponieważ podczas pobierania lvl jest "Level: 50"
