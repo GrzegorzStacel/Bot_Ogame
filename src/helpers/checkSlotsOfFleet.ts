@@ -1,14 +1,14 @@
-import puppeteer from "puppeteer";
+import puppeteer, { ElementHandle } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { takeInnerText } from "./takeInnerText.js";
 import { delay } from "../utils/delay.js";
 
-export async function checkSlotsOfFleet(needFreeNumberOfSlots) {
+export async function checkSlotsOfFleet(needFreeNumberOfSlots: number) {
   console.log("checkSlotsOfFleet.js - needFreeNumberOfSlots::: ", needFreeNumberOfSlots);
   const { page } = await setupBrowser();
 
   try {
-    const isNoFleetMovement = await takeInnerText(".fleet-info-section div");
+    const isNoFleetMovement: string = await takeInnerText(".fleet-info-section div");
     await delay();
 
     if (isNoFleetMovement === "No fleet movement") {
@@ -16,8 +16,7 @@ export async function checkSlotsOfFleet(needFreeNumberOfSlots) {
     }
     console.log("1");
 
-    const maxSlotsOfFleet_string = await takeInnerText("#fleet-movement-detail-btn span b");
-    const maxSlotsOfFleet = Number(maxSlotsOfFleet_string);
+    const maxSlotsOfFleet = Number(await takeInnerText("#fleet-movement-detail-btn span b"));
     await delay();
     console.log("2");
 
@@ -39,7 +38,7 @@ export async function checkSlotsOfFleet(needFreeNumberOfSlots) {
     console.log("4");
     if (busySlotsOfFleet === maxSlotsOfFleet) {
       //TODO czekaj aż flota wróci w ilości pokrywającej wartości zmiennej needFreeNumberOfSlots 1/3/6
-      const openModuleToCheckTheTimeToRemainingFlote = await page.$(".fleet-info-section");
+      const openModuleToCheckTheTimeToRemainingFlote: ElementHandle = await page.$(".fleet-info-section");
       openModuleToCheckTheTimeToRemainingFlote.click();
 
       const remainingSeconds = await getRemainingSeconds(page, needFreeNumberOfSlots);
@@ -58,17 +57,17 @@ export async function checkSlotsOfFleet(needFreeNumberOfSlots) {
   }
 }
 
-async function getRemainingSeconds(page, needFreeNumberOfSlots) {
+async function getRemainingSeconds(page, needFreeNumberOfSlots: number) {
   // Ustal poprawny indeks, zakładając, że `needFreeNumberOfSlots` to liczba
   const index = needFreeNumberOfSlots - 1; // Przypisanie do nowej zmiennej
 
-  const remainingSeconds = await page.evaluate((index) => {
+  const remainingSeconds: number | null = await page.evaluate((index: number) => {
     // Znajdź odpowiedni <tr> w tabeli o id "fleet-movement-table"
     const row = document.querySelectorAll("#fleet-movement-table tr")[index];
 
     if (row) {
       // Znajdź <td> z atrybutem data-remaining-seconds
-      const td = row.querySelector("td[data-remaining-seconds]");
+      const td: Element | null = row.querySelector("td[data-remaining-seconds]");
       return td ? td.textContent.trim() : null;
     }
     return null;

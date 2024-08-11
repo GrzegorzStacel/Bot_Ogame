@@ -1,20 +1,21 @@
 import fs from "fs";
-import path from "path";
+import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import { getFormattedActualDate } from "./getFormattedActualDate.js";
 
-export async function modifyJsonFile(filePathArg, indexActualArray, isSafe) {
+type JsonArray = [string, string, string, string | null, string | null];
+
+export async function modifyJsonFile(filePathArg: string, indexActualArray: number, isSafe: string) {
   try {
-    // Uzyskanie ścieżki do katalogu roboczego
     const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
+    const __dirname = dirname(__filename);
 
     // Ścieżka do pliku JSON
     const filePath = path.join(__dirname, filePathArg);
 
     // Wczytaj zawartość pliku JSON
     const data = await fs.promises.readFile(filePath, "utf8");
-    const jsonArray = JSON.parse(data);
+    const jsonArray: JsonArray[] = JSON.parse(data);
 
     console.log(`Rozpoczynam modyfikowanie pliku JSON: ${jsonArray[indexActualArray]}`);
 

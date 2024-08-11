@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6", // Wersja ECMAScript, do której kompilować
+    "module": "ESNext", // System modułów (Node.js używa commonjs)
+    "outDir": "./dist", // Katalog wyjściowy dla skompilowanych plików
+    "rootDir": "./src", // Katalog źródłowy plików TypeScript
+    "moduleResolution": "node", // Określa sposób, w jaki TypeScript rozwiązuje moduły. Ustawienie na "node" jest zalecane, jeśli używasz Node.js.
+    "allowSyntheticDefaultImports": true, // Umożliwia importowanie domyślnych eksportów z modułów, które nie używają eksportów domyślnych.
+    "esModuleInterop": true, // Umożliwia zgodność z modułami CommonJS.
+    "resolveJsonModule": true // Umożliwia importowanie plików JSON
+  },
+  "include": ["src/**/*.ts", "src/**/*.json", "src/globals.d.ts"],
+  "exclude": ["node_modules"]
+}

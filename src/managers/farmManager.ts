@@ -1,15 +1,16 @@
-import puppeteer from "puppeteer";
 // import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import { importantStrings } from "../settings.js";
+import { importantStrings } from "../data/settings.js";
 import { sendFleet } from "./sendFleet.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
-import farmCoordinates from "../data/farmCoordinates.json" assert { type: "json" };
+// import farmCoordinates from "../data/farmCoordinates.json" assert { type: "json" };
 import { checkSpyMessages } from "./checkSpyMessages.js";
 import { delay } from "../utils/delay.js";
 import { getFormattedActualDate } from "../helpers/getFormattedActualDate.js";
+
+type CoordinatesArray = [string, string, string, string | null, string | null];
 
 export async function farmManager() {
   // const { page } = await setupBrowser();
@@ -27,7 +28,7 @@ export async function farmManager() {
   try {
     // Wczytaj dane z pliku JSON
     const data = await fs.readFile(filePath, "utf8");
-    const coordinatesArray = JSON.parse(data);
+    const coordinatesArray: CoordinatesArray = JSON.parse(data);
 
     // Iteruj przez każdą wewnętrzną tablicę i przekaż ją do funkcji
     for (const [index, coordinates] of coordinatesArray.entries()) {
@@ -35,10 +36,11 @@ export async function farmManager() {
 
       if (date !== actualDate || date === null) {
         if (isSafe === null || isSafe === stringSafe) {
-          // console.log("Ilość przeskanowanych planet: ", index);
           console.log(`${galaxy}:${system}:${planet} - Wysyłam 6000 sond szpiegowskich`);
 
-          let flightDurationOneWay = await sendFleet(link_SPY_PROBE, 5000, galaxy, system, planet, stringSpy);
+          const numberOfProbes: number = 5000;
+          let flightDurationOneWay = await sendFleet(link_SPY_PROBE, numberOfProbes, galaxy, system, planet, stringSpy);
+
           await delay((flightDurationOneWay += 2000));
           await checkSpyMessages(index);
         }

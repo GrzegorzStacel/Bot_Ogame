@@ -1,31 +1,39 @@
 import fs from "fs/promises";
 
-export async function writeDataToFile(filePath, arraywithData) {
+type DataItem = [string, string, string, string?, string?];
+
+export async function writeDataToFile(filePath: string, arraywithData: Array<[string, string, string]>) {
   try {
-    const existingData = await fs.readFile(filePath, "utf8").catch(() => "[]");
-    const existingArray = JSON.parse(existingData);
+    const existingData: string = await fs.readFile(filePath, "utf8").catch(() => "[]");
+    const existingArray: DataItem[] = JSON.parse(existingData);
 
     // Utwórz mapę do szybkiego dostępu do istniejących danych
-    const existingMap = new Map(existingArray.map((item) => [item.slice(0, 3).join(","), item]));
+    const existingMap = new Map<string, DataItem>(existingArray.map((item) => [item.slice(0, 3).join(","), item]));
 
     // Utwórz mapę do szybkiego dostępu do nowych danych
-    const newArrayMap = new Map(arraywithData.map((item) => [item.slice(0, 3).join(","), item]));
+    const newArrayMap = new Map<string, DataItem>(arraywithData.map((item) => [item.slice(0, 3).join(","), item]));
 
     // Utwórz nową tablicę z aktualizowanych danych
-    const updatedArray = [];
+    const updatedArray: DataItem[] = [];
 
     // Dodaj nowe dane lub zaktualizuj istniejące
     for (const [key, newItem] of newArrayMap) {
+      // key: string
+      // newItem: DataItem[]
+
       if (existingMap.has(key)) {
         // Zaktualizuj istniejące dane, jeśli nowe dane są dostępne
-        const existingItem = existingMap.get(key);
+        const existingItem: DataItem | null = existingMap.get(key);
+
         if (newItem.length > 3) {
           existingItem[3] = newItem[3] || existingItem[3];
         }
         if (newItem.length > 4) {
           existingItem[4] = newItem[4] || existingItem[4];
         }
+
         updatedArray.push(existingItem);
+
         existingMap.delete(key); // Usuń z mapy istniejących danych, bo już zostało zaktualizowane
       } else {
         // Dodaj nowe dane, które nie istnieją w istniejących danych
@@ -33,7 +41,7 @@ export async function writeDataToFile(filePath, arraywithData) {
       }
     }
 
-    const finalArray = updatedArray.map((subArray) => {
+    const finalArray: DataItem[] = updatedArray.map((subArray) => {
       if (Array.isArray(subArray)) {
         while (subArray.length < 5) {
           subArray.push(null);

@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { delay } from "./utils/delay.js";
+import { delay } from "../utils/delay.js";
 
 export async function promoteSerwer(LeftMenu, page, browser, index) {
   try {

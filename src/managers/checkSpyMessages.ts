@@ -1,7 +1,7 @@
-import puppeteer from "puppeteer";
+import puppeteer, { ElementHandle, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import fs from "fs/promises";
-import { importantStrings } from "../settings.js";
+import { importantStrings } from "../data/settings.js";
 import { takeInnerText } from "../helpers/takeInnerText.js";
 import { delay } from "../utils/delay.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
@@ -9,13 +9,13 @@ import { sendFleet } from "./sendFleet.js";
 import { checkSlotsOfFleet } from "../helpers/checkSlotsOfFleet.js";
 import { modifyJsonFile } from "../helpers/modifyJsonFile.js";
 
-export async function checkSpyMessages(indexActualArray) {
+export async function checkSpyMessages(indexActualArray: number) {
   try {
     const { page } = await setupBrowser();
     // TODO Sprawdzić czy sondy nie zostały zniszczone
     let isDone = true;
     let amountOfSpyProbe = 100;
-    let cleanCoordinates;
+    let cleanCoordinates: number[];
     let isThereDangerOnThePlanet = false;
     const { stringSpy, stringAttack, stringDanger, stringSafe } = importantStrings;
 
@@ -23,15 +23,15 @@ export async function checkSpyMessages(indexActualArray) {
       if (page) {
         // await checkSlotsOfFleet(1);
 
-        const messagesPage = await page.$("a[href='/messages']");
-        const navigationPromise = page.waitForNavigation();
+        const messagesPage: ElementHandle<HTMLAnchorElement> | null = await page.$("a[href='/messages']");
+        const navigationPromise: Promise<HTTPResponse> = page.waitForNavigation();
 
         await messagesPage.click();
 
         await navigationPromise;
         await delay(3000);
       } else {
-        console.log("Nie weszliśmy do strony z wiadomościami!", messagesPage);
+        console.log("Nie weszliśmy do strony z wiadomościami!");
         return;
       }
 
@@ -39,32 +39,37 @@ export async function checkSpyMessages(indexActualArray) {
       await delay(500);
       cleanCoordinates = extractCoordinateNumbers(takeCoordinates);
 
-      const checkIsFleetExist_string = await takeInnerText(".message-content tr:nth-of-type(2) td:last-child span");
-      const checkIsFleetExist = extractNumberFromString(checkIsFleetExist_string);
+      const fleetExistenceString = await takeInnerText(".message-content tr:nth-of-type(2) td:last-child span");
+      const fleetCount = extractNumberFromString(fleetExistenceString);
       await delay(500);
 
-      const checkIsDefenseExist_string = await takeInnerText(".message-content tr:nth-of-type(3) td:last-child span");
-      const checkIsDefenseExist = extractNumberFromString(checkIsDefenseExist_string);
+      const defenseExistenceString = await takeInnerText(".message-content tr:nth-of-type(3) td:last-child span");
+      const defenseExistence = extractNumberFromString(defenseExistenceString);
       await delay(500);
 
       // TODO nie jestem w stanie tego przetestować, ponieważ nie znalazłem planety z flotą lub obroną ( jest na planecie [1:471:13])
-      if (checkIsFleetExist === "Brak danych" || checkIsDefenseExist === "Brak danych") {
+      if (fleetCount === "Brak danych" || defenseExistence === "Brak danych") {
         console.log(
           `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Brak dostatecznych informacji. Wysyłam więcej sond: ${
             amountOfSpyProbe + 15000
           }`
         );
-        await sendFleet(fleetStatistics.link_SPY_PROBE, amountOfSpyProbe, cleanCoordinates[0], cleanCoordinates[1], cleanCoordinates[2], stringSpy);
+        await sendFleet(
+          fleetStatistics.link_SPY_PROBE,
+          amountOfSpyProbe,
+          String(cleanCoordinates[0]),
+          String(cleanCoordinates[1]),
+          String(cleanCoordinates[2]),
+          stringSpy
+        );
         delay(5000);
         amountOfSpyProbe += 15000;
-      } else if (checkIsFleetExist !== 0 || checkIsDefenseExist !== 0) {
-        // TODO dodać koordynaty do tej planety do pliku planet do unikania
-
+      } else if (fleetCount !== 0 || defenseExistence !== 0) {
         // Zapisuję do pliku farmCoordinates.json flagę, że planeta posiada obronę i/lub flotę aby nie wysyłać do niej sond szpiegowskich.
         await modifyJsonFile("../data/farmCoordinates.json", indexActualArray, stringDanger);
 
         console.log(
-          `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Na planecie znajduje się - Flota: ${checkIsFleetExist}, Obrona: ${checkIsDefenseExist}. Nie wysyłam statków.`
+          `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Na planecie znajduje się - Flota: ${fleetCount}, Obrona: ${defenseExistence}. Nie wysyłam statków.`
         );
 
         isThereDangerOnThePlanet = true;
@@ -74,11 +79,11 @@ export async function checkSpyMessages(indexActualArray) {
       }
 
       if (isThereDangerOnThePlanet === false) {
-        const checkSpyReport_Metal = await page.$(".message-content tr:nth-of-type(2) td img");
+        const checkSpyReport_Metal: ElementHandle<HTMLImageElement> = await page.$(".message-content tr:nth-of-type(2) td img");
         await delay(500);
-        const checkSpyReport_Crystal = await page.$(".message-content tr:nth-of-type(3) td img");
+        const checkSpyReport_Crystal: ElementHandle<HTMLImageElement> = await page.$(".message-content tr:nth-of-type(3) td img");
         await delay(500);
-        const checkSpyReport_Deuterium = await page.$(".message-content tr:nth-of-type(4) td img");
+        const checkSpyReport_Deuterium: ElementHandle<HTMLImageElement> = await page.$(".message-content tr:nth-of-type(4) td img");
         await delay(500);
         if (checkSpyReport_Metal && checkSpyReport_Crystal && checkSpyReport_Deuterium) {
           const metal = await takeNextSiblingText(checkSpyReport_Metal, page);
@@ -115,19 +120,19 @@ export async function checkSpyMessages(indexActualArray) {
 
           for (let i = 0; i < numberOfAttacks; i++) {
             let getPercentageOfResourcesForOneFly = sumOfAllResources * 0.4;
-            let howMuchSendShips = integerConversionAndRoundingUp(getPercentageOfResourcesForOneFly, fleetStatistics.cargoCapacity_HEAVY_CARGO);
+            let amountOfShipsToSend = integerConversionAndRoundingUp(getPercentageOfResourcesForOneFly, fleetStatistics.cargoCapacity_HEAVY_CARGO);
             console.log(
-              `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Wysyłam w fali: ${i + 1} - ${howMuchSendShips.toLocaleString(
+              `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Wysyłam w fali: ${i + 1} - ${amountOfShipsToSend.toLocaleString(
                 "pl-PL"
               )} Heavy Cargo.`
             );
 
             await sendFleet(
               fleetStatistics.link_HEAVY_CARGO,
-              howMuchSendShips,
-              cleanCoordinates[0],
-              cleanCoordinates[1],
-              cleanCoordinates[2],
+              amountOfShipsToSend,
+              String(cleanCoordinates[0]),
+              String(cleanCoordinates[1]),
+              String(cleanCoordinates[2]),
               stringAttack
             );
 
@@ -148,8 +153,8 @@ export async function checkSpyMessages(indexActualArray) {
   }
 }
 
-async function takeNextSiblingText(element, page) {
-  const resource = await page.evaluate((img) => {
+async function takeNextSiblingText(element: ElementHandle, page) {
+  const resource: string | null = await page.evaluate((img) => {
     const textNode = img.nextSibling;
     return textNode ? textNode.textContent.trim() : null;
   }, element);
@@ -158,12 +163,12 @@ async function takeNextSiblingText(element, page) {
   return Number(cleanText);
 }
 
-function extractCoordinateNumbers(text) {
+function extractCoordinateNumbers(text: string) {
   // Wyrażenie regularne do znalezienia liczb w formacie [1:469:12]
   const regex = /\[(\d+):(\d+):(\d+)\]/;
 
   // Dopasowanie wyrażenia regularnego do tekstu
-  const match = text.match(regex);
+  const match: RegExpMatchArray | null = text.match(regex);
 
   if (match) {
     // Wyciąganie liczb z dopasowania
@@ -176,7 +181,7 @@ function extractCoordinateNumbers(text) {
   }
 }
 
-function extractNumberFromString(str) {
+function extractNumberFromString(str: string) {
   if (str === null || str === undefined) {
     return "Brak danych";
   }
@@ -185,7 +190,7 @@ function extractNumberFromString(str) {
   const cleanedString = str.replace(/[^0-9]/g, "");
 
   // Sprawdzanie, czy cleanedString jest prawidłową liczbą
-  if (cleanedString.length > 0 && !isNaN(cleanedString)) {
+  if (cleanedString.length > 0 && !isNaN(Number(cleanedString))) {
     return Number(cleanedString);
   } else {
     throw new Error("Ciąg wejściowy nie jest w oczekiwanym formacie");
@@ -193,8 +198,8 @@ function extractNumberFromString(str) {
 }
 
 // Konwertuje na liczbę całkowitą i zaokrąglam ją w górę
-function integerConversionAndRoundingUp(amountOfResources, ship) {
-  const howMuchShips = Math.ceil(amountOfResources / ship);
+function integerConversionAndRoundingUp(amountOfResources: number, cargoCapacity: number) {
+  const amountOfShips = Math.ceil(amountOfResources / cargoCapacity);
 
-  return howMuchShips;
+  return amountOfShips;
 }

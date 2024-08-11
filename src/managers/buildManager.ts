@@ -3,8 +3,9 @@ import { takeInnerText } from "../helpers/takeInnerText.js";
 import { countSiblings } from "../helpers/countSiblings.js";
 import { build } from "../helpers/build.js";
 import { listOfBuildings } from "../data/listOfBuildings.js";
-import { goals, settings } from "../settings.js";
+import { goals, settings } from "../data/settings.js";
 import { delay } from "../utils/delay.js";
+import { ElementHandle } from "puppeteer";
 
 export async function buildManager() {
   const { page } = await setupBrowser();
@@ -21,7 +22,7 @@ export async function buildManager() {
     linkBuildDeuteriumMine,
   } = listOfBuildings;
 
-  const pageResources = await page.$(linkGoToPageResources);
+  const pageResources: ElementHandle<Element> = await page.$(linkGoToPageResources);
 
   // Przechodzę do podstrony resources a potem do informacji o budynku, aby pojawiły się ukryte dane, jak czas i potrzebne surowce
   await pageResources.click();
@@ -30,7 +31,7 @@ export async function buildManager() {
   // Sprawdź czy kolejka budowania jest pusta
   let isFreeQueing;
 
-  isFreeQueing = await checkQueing(linkCheckIfQueingIsFull, settings.resourcesAndFacilitiesBuidingsQueingToUpgrade);
+  isFreeQueing = await checkQueing(linkCheckIfQueingIsFull);
 
   // Jeśli kolejka budowania jest pełna, wyjdź z funkcji
   if (isFreeQueing) {
@@ -44,9 +45,9 @@ export async function buildManager() {
   await pageDetailResources.click();
   await delay();
 
-  const actualMetalMineLvl = await takeInnerText(linkGetActualMetalMineLvl);
-  const actualCrystalMineLvl = await takeInnerText(linkGetActualCrystalMineLvl);
-  const actualDeuteriumMineLvl = await takeInnerText(linkGetActualDeuteriumMineLvl);
+  const actualMetalMineLvl = Number(await takeInnerText(linkGetActualMetalMineLvl));
+  const actualCrystalMineLvl = Number(await takeInnerText(linkGetActualCrystalMineLvl));
+  const actualDeuteriumMineLvl = Number(await takeInnerText(linkGetActualDeuteriumMineLvl));
 
   console.log(
     "actualMetalMineLvl:",
@@ -63,9 +64,9 @@ export async function buildManager() {
 
   // Sprawdź czy cel został spełniony
   if (
-    goals.GoalForMetalMineLvl === linkGetActualMetalMineLvl &&
-    goals.GoalForCrystalMineLvl === linkGetActualCrystalMineLvl &&
-    goals.GoalForDeuteriumMineLvl === linkGetActualDeuteriumMineLvl
+    goals.GoalForMetalMineLvl === Number(linkGetActualMetalMineLvl) &&
+    goals.GoalForCrystalMineLvl === Number(linkGetActualCrystalMineLvl) &&
+    goals.GoalForDeuteriumMineLvl === Number(linkGetActualDeuteriumMineLvl)
   ) {
     console.log("Cel wybudowanych poziomów budynków został spełniony!");
     isGoalAchieved = true;
@@ -94,8 +95,8 @@ export async function buildManager() {
   }
 }
 
-async function checkQueing(link, setting) {
-  const numberInQueing = await countSiblings(link, setting);
+async function checkQueing(link) {
+  const numberInQueing = await countSiblings(link);
 
   console.log("checkQueing - numberInqueing: ", numberInQueing, numberInQueing == settings.maxResourcesAndFacilitiesBuidingsQueingToUpgrade);
 
