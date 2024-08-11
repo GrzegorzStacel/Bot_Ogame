@@ -119,6 +119,7 @@ export async function checkSpyMessages(indexActualArray: number) {
           );
 
           for (let i = 0; i < numberOfAttacks; i++) {
+            let getPercentageOfResourcesForOneFly = sumOfAllResources * 0.4;
             let amountOfShipsToSend = integerConversionAndRoundingUp(getPercentageOfResourcesForOneFly, fleetStatistics.cargoCapacity_HEAVY_CARGO);
             console.log(
               `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Wysyłam w fali: ${i + 1} - ${amountOfShipsToSend.toLocaleString(
