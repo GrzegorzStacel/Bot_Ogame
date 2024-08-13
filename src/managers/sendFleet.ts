@@ -1,10 +1,10 @@
-import puppeteer, { ElementHandle, HTTPResponse } from "puppeteer";
+import { ElementHandle, Page, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { delay } from "../utils/delay.js";
 import { takeInnerText } from "../helpers/takeInnerText.js";
 import { getStringAndConvertTimeToMilliseconds } from "../helpers/getStringAndConvertTimeToMilliseconds.js";
+import { checkSlotsOfFleet } from "../helpers/checkSlotsOfFleet.js";
 
-// mission = "Attack", "Spy"
 export async function sendFleet(
   shipElement: string,
   amountOfSheeps: number,
@@ -19,20 +19,21 @@ export async function sendFleet(
     const { page } = await setupBrowser();
 
     if (page) {
+      await page.waitForSelector("a[href='/fleet']");
       fleetPage = await page.$("a[href='/fleet']");
+
       const navigationPromise: Promise<HTTPResponse> = page.waitForNavigation();
 
       await fleetPage.click();
 
       await navigationPromise;
-
-      await delay(3000);
     } else {
       console.log("Nie znaleziono przycisku z flotą!", fleetPage);
       return;
     }
 
     // Sprawdzam czy są dostępne statki, jeśli nie, wychodzę z funkcji
+    await page.waitForSelector(shipElement);
     const selectShip: ElementHandle<Element> = await page.$(shipElement);
 
     if (!selectShip) {
@@ -42,6 +43,8 @@ export async function sendFleet(
     } else {
       // Podaj ilość statków do wysłania
       const nextElementHandle: ElementHandle | null = await page.evaluateHandle((el) => el.nextElementSibling, selectShip);
+
+      await checkSlotsOfFleet();
 
       if (nextElementHandle) {
         // Sprawdź, czy następny element rodzeństwa zawiera <input>
@@ -79,12 +82,13 @@ export async function sendFleet(
       await delay();
 
       // Pobieram czas jaki potrzebuje sonda szpiegowska aby dolecieć do danej planety i zwracam ten czas w milisekundach w return
+      await page.waitForSelector("#fleet3_briefing li:nth-child(3)");
       const flightDurationOneWay_string = await takeInnerText("#fleet3_briefing li:nth-child(3)");
       const flightDurationOneWay = getStringAndConvertTimeToMilliseconds(flightDurationOneWay_string);
 
+      await page.waitForSelector(`a[data-mission-name="${mission}"]`);
       const selectAttackBtn: ElementHandle<HTMLAnchorElement> = await page.$(`a[data-mission-name="${mission}"]`);
       await selectAttackBtn.click();
-      await delay();
 
       clickNextButton = await page.$(".mission-select-bottom .btn-continue");
       await clickNextButton.click();
@@ -100,7 +104,7 @@ export async function sendFleet(
   }
 }
 
-async function setValueInInput(element: ElementHandle<Element>, value: string, page) {
+async function setValueInInput(element: ElementHandle<Element>, value: string, page: Page) {
   await page.evaluate(
     (input: HTMLInputElement, setValue: string) => {
       input.value = setValue;

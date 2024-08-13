@@ -1,12 +1,10 @@
-import puppeteer, { ElementHandle, HTTPResponse } from "puppeteer";
+import { ElementHandle, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
-import fs from "fs/promises";
 import { importantStrings } from "../data/settings.js";
 import { takeInnerText } from "../helpers/takeInnerText.js";
 import { delay } from "../utils/delay.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
 import { sendFleet } from "./sendFleet.js";
-import { checkSlotsOfFleet } from "../helpers/checkSlotsOfFleet.js";
 import { modifyJsonFile } from "../helpers/modifyJsonFile.js";
 
 export async function checkSpyMessages(indexActualArray: number) {
@@ -21,31 +19,29 @@ export async function checkSpyMessages(indexActualArray: number) {
 
     while (isDone) {
       if (page) {
-        // await checkSlotsOfFleet(1);
-
+        await page.waitForSelector("a[href='/messages']");
         const messagesPage: ElementHandle<HTMLAnchorElement> | null = await page.$("a[href='/messages']");
         const navigationPromise: Promise<HTTPResponse> = page.waitForNavigation();
 
         await messagesPage.click();
 
         await navigationPromise;
-        await delay(3000);
       } else {
         console.log("Nie weszliśmy do strony z wiadomościami!");
         return;
       }
 
+      await page.waitForSelector(".message-head .head-left span a");
       const takeCoordinates = await takeInnerText(".message-head .head-left span a");
-      await delay(500);
       cleanCoordinates = extractCoordinateNumbers(takeCoordinates);
 
+      await page.waitForSelector(".message-content tr:nth-of-type(2) td:last-child span");
       const fleetExistenceString = await takeInnerText(".message-content tr:nth-of-type(2) td:last-child span");
       const fleetCount = extractNumberFromString(fleetExistenceString);
-      await delay(500);
 
+      await page.waitForSelector(".message-content tr:nth-of-type(3) td:last-child span");
       const defenseExistenceString = await takeInnerText(".message-content tr:nth-of-type(3) td:last-child span");
       const defenseExistence = extractNumberFromString(defenseExistenceString);
-      await delay(500);
 
       // TODO nie jestem w stanie tego przetestować, ponieważ nie znalazłem planety z flotą lub obroną ( jest na planecie [1:471:13])
       if (fleetCount === "Brak danych" || defenseExistence === "Brak danych") {
@@ -54,6 +50,7 @@ export async function checkSpyMessages(indexActualArray: number) {
             amountOfSpyProbe + 15000
           }`
         );
+
         await sendFleet(
           fleetStatistics.link_SPY_PROBE,
           amountOfSpyProbe,
@@ -62,7 +59,6 @@ export async function checkSpyMessages(indexActualArray: number) {
           String(cleanCoordinates[2]),
           stringSpy
         );
-        delay(5000);
         amountOfSpyProbe += 15000;
       } else if (fleetCount !== 0 || defenseExistence !== 0) {
         // Zapisuję do pliku farmCoordinates.json flagę, że planeta posiada obronę i/lub flotę aby nie wysyłać do niej sond szpiegowskich.
@@ -108,10 +104,6 @@ export async function checkSpyMessages(indexActualArray: number) {
           } else {
             numberOfAttacks = 1;
           }
-
-          // TODO func checkSlotsOfFleet odpala się od razu po info o wysłaniu 6k sond (może przelatuje tutaj góre ale nic nie robi). numberofattack jest undefined, dlatego wywala błąd w poniższej func.
-          console.log("checkSpyMessages.js - numberOfAttacks::: ", numberOfAttacks);
-          await checkSlotsOfFleet(numberOfAttacks);
 
           console.log(
             `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Na planecie jest surowców:
