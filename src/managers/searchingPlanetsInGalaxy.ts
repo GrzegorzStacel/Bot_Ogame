@@ -3,6 +3,7 @@ import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import fs from "fs/promises";
 import { delay } from "../utils/delay.js";
 import { writeDataToFile } from "../helpers/writeDataToFile.js";
+import { getRandomNumber } from "../helpers/getRandomNumber.js";
 
 export async function searchingPlanetsInGalaxy() {
   const { page } = await setupBrowser();
@@ -17,7 +18,7 @@ export async function searchingPlanetsInGalaxy() {
 
     await navigationPromise;
 
-    await delay(3000);
+    await delay(getRandomNumber(2000, 3000));
   } else {
     console.log("Nie znaleziono przycisku z galaktyką!", galaxyPage);
     return;
