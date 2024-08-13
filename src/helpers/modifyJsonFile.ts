@@ -23,12 +23,13 @@ export async function modifyJsonFile(filePathArg: string, indexActualArray: numb
     if (jsonArray.length > indexActualArray) {
       // Zaktualizuj wybraną tablicę
       const targetArray = jsonArray[indexActualArray];
+      const actualDate = getFormattedActualDate();
 
       // Jeśli brak daty i flagi w tablicy, dodaj je
-      if (targetArray.length < 4 || targetArray[3] === null) {
-        targetArray[3] = getFormattedActualDate();
+      if (targetArray.length < 4 || targetArray[3] === null || targetArray[3] !== actualDate) {
+        targetArray[3] = actualDate;
       }
-      if (targetArray.length < 5 || targetArray[4] === null) {
+      if (targetArray.length < 5 || targetArray[4] === null || targetArray[4] !== isSafe) {
         targetArray[4] = isSafe;
       }
 
