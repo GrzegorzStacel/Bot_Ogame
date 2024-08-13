@@ -75,7 +75,3 @@ function addCoordinatesToArray(array: string[][], galaxy: string, system: string
   array.push(coordinates);
   console.log("coordinates::: ", coordinates);
 }
-
-function getRandomNumber(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
