@@ -7,7 +7,7 @@ import { checkSlotsOfFleet } from "../helpers/checkSlotsOfFleet.js";
 
 export async function sendFleet(
   shipElement: string,
-  amountOfSheeps: number,
+  amountOfShips: number,
   numberOfgalaxy: string,
   numberOfSystem: string,
   numberOfPlanet: string,
