@@ -2,7 +2,7 @@ import { ElementHandle, Page, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { delay } from "../utils/delay.js";
 import { takeInnerText } from "../helpers/domHelpers/takeInnerText.js";
-import { getStringAndConvertTimeToMilliseconds } from "../helpers/dateHelpers/getStringAndConvertTimeToMilliseconds.js";
+import { timeStringToMilliseconds } from "../helpers/dateHelpers/timeStringToMilliseconds.js";
 import { checkSlotsOfFleet } from "../helpers/fleetHelpers/checkSlotsOfFleet.js";
 import { getRandomNumber } from "../helpers/randomHelpers/getRandomNumber.js";
 
@@ -83,7 +83,7 @@ export async function sendFleet(shipElement: string, amountOfShips: number, numb
       // Pobieram czas jaki potrzebuje sonda szpiegowska aby dolecieć do danej planety i zwracam ten czas w milisekundach w return
       await page.waitForSelector("#fleet3_briefing li:nth-child(3)");
       const flightDurationOneWay_string = await takeInnerText("#fleet3_briefing li:nth-child(3)");
-      const flightDurationOneWay = getStringAndConvertTimeToMilliseconds(flightDurationOneWay_string);
+      const flightDurationOneWay = timeStringToMilliseconds(flightDurationOneWay_string);
       await delay(getRandomNumber(350, 1000));
 
       await page.waitForSelector(`a[data-mission-name="${mission}"]`);

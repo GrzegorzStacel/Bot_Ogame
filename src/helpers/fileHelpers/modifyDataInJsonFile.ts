@@ -1,11 +1,11 @@
 import fs from "fs";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import { getFormattedActualDate } from "../dateHelpers/getFormattedActualDate.js";
+import { getCurrentDate } from "../dateHelpers/getCurrentDate.js";
 
 type JsonArray = [string, string, string, string | null, string | null];
 
-export async function modifyJsonFile(filePathArg: string, indexActualArray: number, isSafe: string) {
+export async function modifyDataInJsonFile(filePathArg: string, indexActualArray: number, isSafe: string) {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
@@ -23,7 +23,7 @@ export async function modifyJsonFile(filePathArg: string, indexActualArray: numb
     if (jsonArray.length > indexActualArray) {
       // Zaktualizuj wybraną tablicę
       const targetArray = jsonArray[indexActualArray];
-      const actualDate = getFormattedActualDate();
+      const actualDate = getCurrentDate();
 
       // Jeśli brak daty i flagi w tablicy, dodaj je
       if (targetArray.length < 4 || targetArray[3] === null || targetArray[3] !== actualDate) {

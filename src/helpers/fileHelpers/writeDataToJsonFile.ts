@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 
 type DataItem = [string, string, string, string?, string?];
 
-export async function writeDataToFile(filePathArg: string, arraywithData: Array<[string, string, string]>) {
+export async function writeDataToJsonFile(filePathArg: string, arraywithData: Array<[string, string, string]>) {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);

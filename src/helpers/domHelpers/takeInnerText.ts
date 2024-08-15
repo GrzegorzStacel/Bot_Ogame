@@ -1,5 +1,5 @@
 import { ElementHandle } from "puppeteer";
-import { setupBrowser } from "../setupBrowser/setupBrowser.js";
+import { setupBrowser } from "../../setupBrowser/setupBrowser.js";
 
 // Element musi być stringiem!
 export async function takeInnerText(element: string, isSlice: boolean = false) {

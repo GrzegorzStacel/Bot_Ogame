@@ -1,7 +1,7 @@
 import puppeteer, { ElementHandle, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { delay } from "../utils/delay.js";
-import { writeDataToFile } from "../helpers/fileHelpers/writeDataToFile.js";
+import { writeDataToJsonFile } from "../helpers/fileHelpers/writeDataToJsonFile.js";
 import { getRandomNumber } from "../helpers/randomHelpers/getRandomNumber.js";
 
 export async function searchingPlanetsInGalaxy() {
@@ -64,7 +64,7 @@ export async function searchingPlanetsInGalaxy() {
   }
 
   // Zapisz wyniki do pliku
-  await writeDataToFile("../data/farmCoordinates.json", arrayWithCoordinatesToInactivePlanets);
+  await writeDataToJsonFile("../data/farmCoordinates.json", arrayWithCoordinatesToInactivePlanets);
 }
 
 function addCoordinatesToArray(array: string[][], galaxy: string, system: string, position: string) {

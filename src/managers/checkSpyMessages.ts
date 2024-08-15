@@ -5,7 +5,7 @@ import { takeInnerText } from "../helpers/domHelpers/takeInnerText.js";
 import { delay } from "../utils/delay.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
 import { sendFleet } from "./sendFleet.js";
-import { modifyJsonFile } from "../helpers/fileHelpers/modifyJsonFile.js";
+import { modifyDataInJsonFile } from "../helpers/fileHelpers/modifyDataInJsonFile.js";
 
 export async function checkSpyMessages(indexActualArray: number) {
   try {
@@ -51,7 +51,7 @@ export async function checkSpyMessages(indexActualArray: number) {
         amountOfSpyProbe += 15000;
       } else if (fleetCount !== 0 || defenseExistence !== 0) {
         // Zapisuję do pliku farmCoordinates.json flagę, że planeta posiada obronę i/lub flotę aby nie wysyłać do niej sond szpiegowskich.
-        await modifyJsonFile("../data/farmCoordinates.json", indexActualArray, stringDanger);
+        await modifyDataInJsonFile("../data/farmCoordinates.json", indexActualArray, stringDanger);
 
         console.log(
           `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Na planecie znajduje się - Flota: ${fleetCount}, Obrona: ${defenseExistence}. Nie wysyłam statków.`
@@ -110,7 +110,7 @@ export async function checkSpyMessages(indexActualArray: number) {
           }
 
           // Zapisuję do pliku farmCoordinates.json datę zabrania surowców z planety
-          await modifyJsonFile("../data/farmCoordinates.json", indexActualArray, stringSafe);
+          await modifyDataInJsonFile("../data/farmCoordinates.json", indexActualArray, stringSafe);
         }
 
         return;

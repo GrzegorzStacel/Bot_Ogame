@@ -8,14 +8,14 @@ import { fleetStatistics } from "../data/fleetStatistics.js";
 // import farmCoordinates from "../data/farmCoordinates.json" assert { type: "json" };
 import { checkSpyMessages } from "./checkSpyMessages.js";
 import { delay } from "../utils/delay.js";
-import { getFormattedActualDate } from "../helpers/dateHelpers/getFormattedActualDate.js";
+import { getCurrentDate } from "../helpers/dateHelpers/getCurrentDate.js";
 
 type CoordinatesArray = [string, string, string, string | null, string | null];
 
 export async function farmManager() {
   // const { page } = await setupBrowser();
   const { link_SPY_PROBE } = fleetStatistics;
-  const actualDate = getFormattedActualDate();
+  const actualDate = getCurrentDate();
   const { stringSafe, stringDanger, stringSpy } = importantStrings;
 
   // Uzyskanie ścieżki do katalogu roboczego
