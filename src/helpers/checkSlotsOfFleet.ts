@@ -1,77 +1,58 @@
-import puppeteer, { ElementHandle } from "puppeteer";
+import { ElementHandle, Page, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { takeInnerText } from "./takeInnerText.js";
 import { delay } from "../utils/delay.js";
 
-export async function checkSlotsOfFleet(needFreeNumberOfSlots: number) {
-  console.log("checkSlotsOfFleet.js - needFreeNumberOfSlots::: ", needFreeNumberOfSlots);
+export async function checkSlotsOfFleet() {
   const { page } = await setupBrowser();
+  let fleetPage: ElementHandle<HTMLAnchorElement> | null;
 
   try {
+    await page.waitForSelector(".fleet-info-section div");
     const isNoFleetMovement: string = await takeInnerText(".fleet-info-section div");
-    await delay();
 
     if (isNoFleetMovement === "No fleet movement") {
       return;
     }
-    console.log("1");
 
-    const maxSlotsOfFleet = Number(await takeInnerText("#fleet-movement-detail-btn span b"));
-    await delay();
-    console.log("2");
+    await page.waitForSelector(".fleet-info-box span");
+    const takeTextWithAmountOfSlots: string = await takeInnerText(".fleet-info-box span");
+    const slotsBusyAndMax: [number, number] = extractNumbersFromString(takeTextWithAmountOfSlots);
 
-    const busySlotsOfFleet_string = await takeInnerText("#fleet-movement-detail-btn span:last-of-type");
-    await delay();
+    const busySlots = slotsBusyAndMax[0];
+    const maxSlots = slotsBusyAndMax[1];
 
-    console.log("3");
-    // \d+ to wyrażenie regularne, które dopasowuje jedną lub więcej cyfr.
-    // busySlotsOfFleet.match(/\d+/) zwraca tablicę wszystkich dopasowań wyrażenia regularnego w ciągu znaków busySlotsOfFleet. Zwróci np. tablicę ["17"].
-    // [0] wybiera pierwszy (i jedyny) element tej tablicy, czyli "17".
-    const busySlotsOfFleet = Number(busySlotsOfFleet_string.match(/\d+/)[0]);
-    console.log("busySlotsOfFleet::: ", busySlotsOfFleet);
-    console.log("maxSlotsOfFleet::: ", maxSlotsOfFleet);
-    console.log("busySlotsOfFleet === maxSlotsOfFleet ", busySlotsOfFleet === maxSlotsOfFleet);
-    //3
-    // busySlotsOfFleet:::  20
-    // maxSlotsOfFleet:::  20
-    // busySlotsOfFleet === maxSlotsOfFleet  true
-    console.log("4");
-    if (busySlotsOfFleet === maxSlotsOfFleet) {
-      //TODO czekaj aż flota wróci w ilości pokrywającej wartości zmiennej needFreeNumberOfSlots 1/3/6
-      const openModuleToCheckTheTimeToRemainingFlote: ElementHandle = await page.$(".fleet-info-section");
-      openModuleToCheckTheTimeToRemainingFlote.click();
+    if (busySlots === maxSlots) {
+      await page.waitForSelector(".fleet-info-section");
 
-      const remainingSeconds = await getRemainingSeconds(page, needFreeNumberOfSlots);
-      console.log(`checkSlotsOfFleet.js - czekam na powrót ${needFreeNumberOfSlots} (flot) ${remainingSeconds} sekund.`);
+      const remainingSeconds = await getRemainingSeconds(page);
+      console.log(`Czekam na powrót floty ${remainingSeconds} sekund.`);
 
       await delay(remainingSeconds);
-    } else if (busySlotsOfFleet + needFreeNumberOfSlots <= maxSlotsOfFleet) {
-      console.log("5");
+    } else {
+      console.log("Jest wolny slot. Można wysłać flotę.");
       return;
     }
-    await delay();
-
-    await delay();
   } catch (error) {
     console.error("Błąd w checkSlotsOfFleet.js: ", error);
   }
 }
 
-async function getRemainingSeconds(page, needFreeNumberOfSlots: number) {
-  // Ustal poprawny indeks, zakładając, że `needFreeNumberOfSlots` to liczba
-  const index = needFreeNumberOfSlots - 1; // Przypisanie do nowej zmiennej
+async function getRemainingSeconds(page: Page): Promise<number> {
+  await page.waitForSelector("#fleet-movement-detail-btn div:nth-of-type(2) span");
+  const textWithEarliestFleetReturnTimeSpan: string = await takeInnerText("#fleet-movement-detail-btn div:nth-of-type(2) span");
+  const minutesAndSecondsToFleetReturn: [number, number] = extractNumbersFromString(textWithEarliestFleetReturnTimeSpan);
 
-  const remainingSeconds: number | null = await page.evaluate((index: number) => {
-    // Znajdź odpowiedni <tr> w tabeli o id "fleet-movement-table"
-    const row = document.querySelectorAll("#fleet-movement-table tr")[index];
+  // Tablica [0] przechowuje minuty, a [1] sekundy, 5000 to jest ekstra czas na ewentualnie doładowanie się elementów DOM'u
+  const milisecondsToFleetReturn: number = minutesAndSecondsToFleetReturn[0] * 60 + minutesAndSecondsToFleetReturn[1] * 1000 + 5000;
 
-    if (row) {
-      // Znajdź <td> z atrybutem data-remaining-seconds
-      const td: Element | null = row.querySelector("td[data-remaining-seconds]");
-      return td ? td.textContent.trim() : null;
-    }
-    return null;
-  }, index); // Przekazanie zmiennej index do evaluate
+  return milisecondsToFleetReturn;
+}
 
-  return remainingSeconds; // Zwracanie wyniku
+function extractNumbersFromString(str) {
+  // Użycie wyrażenia regularnego do wyodrębnienia liczb
+  const numbers = str.match(/\d+/g);
+
+  // Zwraca tablicę z dwiema liczbami
+  return numbers ? numbers.map(Number) : [];
 }
