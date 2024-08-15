@@ -45,20 +45,9 @@ export async function checkSpyMessages(indexActualArray: number) {
 
       // TODO nie jestem w stanie tego przetestować, ponieważ nie znalazłem planety z flotą lub obroną ( jest na planecie [1:471:13])
       if (fleetCount === "Brak danych" || defenseExistence === "Brak danych") {
-        console.log(
-          `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Brak dostatecznych informacji. Wysyłam więcej sond: ${
-            amountOfSpyProbe + 15000
-          }`
-        );
+        console.log(`${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Brak dostatecznych informacji. Wysyłam więcej sond: ${amountOfSpyProbe + 15000}`);
 
-        await sendFleet(
-          fleetStatistics.link_SPY_PROBE,
-          amountOfSpyProbe,
-          String(cleanCoordinates[0]),
-          String(cleanCoordinates[1]),
-          String(cleanCoordinates[2]),
-          stringSpy
-        );
+        await sendFleet(fleetStatistics.link_SPY_PROBE, amountOfSpyProbe, String(cleanCoordinates[0]), String(cleanCoordinates[1]), String(cleanCoordinates[2]), stringSpy);
         amountOfSpyProbe += 15000;
       } else if (fleetCount !== 0 || defenseExistence !== 0) {
         // Zapisuję do pliku farmCoordinates.json flagę, że planeta posiada obronę i/lub flotę aby nie wysyłać do niej sond szpiegowskich.
@@ -90,11 +79,7 @@ export async function checkSpyMessages(indexActualArray: number) {
           let numberOfAttacks = 6;
 
           if (sumOfAllResources < 500000000000) {
-            console.log(
-              `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${
-                cleanCoordinates[2]
-              } - Za mało surowców aby się fatygować: ${sumOfAllResources.toLocaleString("pl-PL")}`
-            );
+            console.log(`${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Za mało surowców aby się fatygować: ${sumOfAllResources.toLocaleString("pl-PL")}`);
             // TODO sprawdzić czy to nie jest nierozbudowana planeta (sprawdzić lvl storage's)
             return;
           } else if (sumOfAllResources > 2000000000000) {
@@ -119,14 +104,7 @@ export async function checkSpyMessages(indexActualArray: number) {
               )} Heavy Cargo.`
             );
 
-            await sendFleet(
-              fleetStatistics.link_HEAVY_CARGO,
-              amountOfShipsToSend,
-              String(cleanCoordinates[0]),
-              String(cleanCoordinates[1]),
-              String(cleanCoordinates[2]),
-              stringAttack
-            );
+            await sendFleet(fleetStatistics.link_HEAVY_CARGO, amountOfShipsToSend, String(cleanCoordinates[0]), String(cleanCoordinates[1]), String(cleanCoordinates[2]), stringAttack);
 
             sumOfAllResources = sumOfAllResources - getPercentageOfResourcesForOneFly;
           }
