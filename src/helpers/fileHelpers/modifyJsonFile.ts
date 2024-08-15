@@ -1,7 +1,7 @@
 import fs from "fs";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import { getFormattedActualDate } from "./getFormattedActualDate.js";
+import { getFormattedActualDate } from "../dateHelpers/getFormattedActualDate.js";
 
 type JsonArray = [string, string, string, string | null, string | null];
 

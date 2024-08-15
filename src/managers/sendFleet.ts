@@ -1,19 +1,12 @@
 import { ElementHandle, Page, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { delay } from "../utils/delay.js";
-import { takeInnerText } from "../helpers/takeInnerText.js";
-import { getStringAndConvertTimeToMilliseconds } from "../helpers/getStringAndConvertTimeToMilliseconds.js";
-import { checkSlotsOfFleet } from "../helpers/checkSlotsOfFleet.js";
-import { getRandomNumber } from "../helpers/getRandomNumber.js";
+import { takeInnerText } from "../helpers/domHelpers/takeInnerText.js";
+import { getStringAndConvertTimeToMilliseconds } from "../helpers/dateHelpers/getStringAndConvertTimeToMilliseconds.js";
+import { checkSlotsOfFleet } from "../helpers/fleetHelpers/checkSlotsOfFleet.js";
+import { getRandomNumber } from "../helpers/randomHelpers/getRandomNumber.js";
 
-export async function sendFleet(
-  shipElement: string,
-  amountOfShips: number,
-  numberOfgalaxy: string,
-  numberOfSystem: string,
-  numberOfPlanet: string,
-  mission: string
-) {
+export async function sendFleet(shipElement: string, amountOfShips: number, numberOfgalaxy: string, numberOfSystem: string, numberOfPlanet: string, mission: string) {
   let fleetPage: ElementHandle<HTMLAnchorElement> | null;
 
   try {

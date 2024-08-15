@@ -1,11 +1,11 @@
 import { ElementHandle, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
-import { importantStrings } from "../data/settings.js";
-import { takeInnerText } from "../helpers/takeInnerText.js";
+import { importantStrings } from "../config/settings.js";
+import { takeInnerText } from "../helpers/domHelpers/takeInnerText.js";
 import { delay } from "../utils/delay.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
 import { sendFleet } from "./sendFleet.js";
-import { modifyJsonFile } from "../helpers/modifyJsonFile.js";
+import { modifyJsonFile } from "../helpers/fileHelpers/modifyJsonFile.js";
 
 export async function checkSpyMessages(indexActualArray: number) {
   try {

@@ -1,8 +1,8 @@
 import puppeteer, { ElementHandle, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { delay } from "../utils/delay.js";
-import { writeDataToFile } from "../helpers/writeDataToFile.js";
-import { getRandomNumber } from "../helpers/getRandomNumber.js";
+import { writeDataToFile } from "../helpers/fileHelpers/writeDataToFile.js";
+import { getRandomNumber } from "../helpers/randomHelpers/getRandomNumber.js";
 
 export async function searchingPlanetsInGalaxy() {
   const { page } = await setupBrowser();

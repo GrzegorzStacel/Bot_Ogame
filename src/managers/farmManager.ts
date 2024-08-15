@@ -2,13 +2,13 @@
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import { importantStrings } from "../data/settings.js";
+import { importantStrings } from "../config/settings.js";
 import { sendFleet } from "./sendFleet.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
 // import farmCoordinates from "../data/farmCoordinates.json" assert { type: "json" };
 import { checkSpyMessages } from "./checkSpyMessages.js";
 import { delay } from "../utils/delay.js";
-import { getFormattedActualDate } from "../helpers/getFormattedActualDate.js";
+import { getFormattedActualDate } from "../helpers/dateHelpers/getFormattedActualDate.js";
 
 type CoordinatesArray = [string, string, string, string | null, string | null];
 

@@ -9,6 +9,6 @@
     "esModuleInterop": true, // Umożliwia zgodność z modułami CommonJS.
     "resolveJsonModule": true // Umożliwia importowanie plików JSON
   },
-  "include": ["src/**/*.ts", "src/**/*.json", "src/globals.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.json", "src/config/globals.d.ts"],
   "exclude": ["node_modules"]
 }

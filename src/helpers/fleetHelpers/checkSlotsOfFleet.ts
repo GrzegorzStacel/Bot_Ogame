@@ -1,7 +1,7 @@
 import { Page } from "puppeteer";
-import { setupBrowser } from "../setupBrowser/setupBrowser.js";
-import { takeInnerText } from "./takeInnerText.js";
-import { delay } from "../utils/delay.js";
+import { setupBrowser } from "../../setupBrowser/setupBrowser.js";
+import { takeInnerText } from "../domHelpers/takeInnerText.js";
+import { delay } from "../../utils/delay.js";
 
 export async function checkSlotsOfFleet() {
   const { page } = await setupBrowser();
