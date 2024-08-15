@@ -45,7 +45,7 @@ export async function searchingPlanetsInGalaxy() {
       }
 
       // Symulowanie przechodzenia przez systemy, jak przez człowieka aby szybkość reakcji była różna
-      await delay(getRandomNumber(800, 1200));
+      await delay(getRandomNumber(300, 700));
 
       await buttonToChangeSystem.click();
 
