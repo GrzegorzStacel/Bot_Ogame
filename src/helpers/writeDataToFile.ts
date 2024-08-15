@@ -1,9 +1,17 @@
 import fs from "fs/promises";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
 type DataItem = [string, string, string, string?, string?];
 
-export async function writeDataToFile(filePath: string, arraywithData: Array<[string, string, string]>) {
+export async function writeDataToFile(filePathArg: string, arraywithData: Array<[string, string, string]>) {
   try {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+
+    // Ścieżka do pliku JSON
+    const filePath = path.join(__dirname, filePathArg);
+
     const existingData: string = await fs.readFile(filePath, "utf8").catch(() => "[]");
     const existingArray: DataItem[] = JSON.parse(existingData);
 
