@@ -1,11 +1,10 @@
-import { ElementHandle, Page, HTTPResponse } from "puppeteer";
+import { Page } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { takeInnerText } from "./takeInnerText.js";
 import { delay } from "../utils/delay.js";
 
 export async function checkSlotsOfFleet() {
   const { page } = await setupBrowser();
-  let fleetPage: ElementHandle<HTMLAnchorElement> | null;
 
   try {
     await page.waitForSelector(".fleet-info-section div");
