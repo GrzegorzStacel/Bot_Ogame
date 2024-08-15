@@ -114,7 +114,7 @@ export async function checkSpyMessages(indexActualArray: number) {
             let getPercentageOfResourcesForOneFly = sumOfAllResources * 0.4;
             let amountOfShipsToSend = integerConversionAndRoundingUp(getPercentageOfResourcesForOneFly, fleetStatistics.cargoCapacity_HEAVY_CARGO);
             console.log(
-              `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Wysyłam w fali: ${i + 1} - ${amountOfShipsToSend.toLocaleString(
+              `${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Wysyłam w fali: ${i + 1}/${numberOfAttacks} - ${amountOfShipsToSend.toLocaleString(
                 "pl-PL"
               )} Heavy Cargo.`
             );
