@@ -5,8 +5,7 @@ import { searchingPlanetsInGalaxy } from "./managers/searchingPlanetsInGalaxy.js
 import { farmManager } from "./managers/farmManager.js";
 
 (async () => {
-  await setupBrowser();
-  await delay();
+  const { page } = await setupBrowser();
 
   // Zmienna zarządzająca akcjami aby każda z nich odbywała się jednocześnie
   let isActualWorking = false;
@@ -18,15 +17,16 @@ import { farmManager } from "./managers/farmManager.js";
       isActualWorking = false;
     }
 
+    //TODO Dodać datę, do pliku, kiedy były skanowane systemy. Uruchamiając dwa lub więcej razy dziennie skrypt, bez takiej informacji, spowoduje, że niepotrzebnie będzie skanował najbliższą okolicę.
     if (!isActualWorking) {
       isActualWorking = true;
-      await searchingPlanetsInGalaxy();
+      // await searchingPlanetsInGalaxy();
       isActualWorking = false;
     }
 
     if (!isActualWorking) {
       isActualWorking = true;
-      await farmManager();
+      await farmManager(page);
       isActualWorking = false;
     }
 

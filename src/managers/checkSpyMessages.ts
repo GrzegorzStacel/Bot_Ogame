@@ -47,7 +47,7 @@ export async function checkSpyMessages(indexActualArray: number) {
       if (fleetCount === "Brak danych" || defenseExistence === "Brak danych") {
         console.log(`${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Brak dostatecznych informacji. Wysyłam więcej sond: ${amountOfSpyProbe + 15000}`);
 
-        await sendFleet(fleetStatistics.link_SPY_PROBE, amountOfSpyProbe, String(cleanCoordinates[0]), String(cleanCoordinates[1]), String(cleanCoordinates[2]), stringSpy);
+        await sendFleet(fleetStatistics.link_SPY_PROBE, amountOfSpyProbe, String(cleanCoordinates[0]), String(cleanCoordinates[1]), String(cleanCoordinates[2]), stringSpy, page);
         amountOfSpyProbe += 15000;
       } else if (fleetCount !== 0 || defenseExistence !== 0) {
         // Zapisuję do pliku farmCoordinates.json flagę, że planeta posiada obronę i/lub flotę aby nie wysyłać do niej sond szpiegowskich.
@@ -104,7 +104,7 @@ export async function checkSpyMessages(indexActualArray: number) {
               )} Heavy Cargo.`
             );
 
-            await sendFleet(fleetStatistics.link_HEAVY_CARGO, amountOfShipsToSend, String(cleanCoordinates[0]), String(cleanCoordinates[1]), String(cleanCoordinates[2]), stringAttack);
+            await sendFleet(fleetStatistics.link_HEAVY_CARGO, amountOfShipsToSend, String(cleanCoordinates[0]), String(cleanCoordinates[1]), String(cleanCoordinates[2]), stringAttack, page);
 
             sumOfAllResources = sumOfAllResources - getPercentageOfResourcesForOneFly;
           }

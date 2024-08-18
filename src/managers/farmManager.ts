@@ -1,4 +1,4 @@
-// import { setupBrowser } from "../setupBrowser/setupBrowser.js";
+import { Page } from "puppeteer";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -12,7 +12,7 @@ import { getCurrentDate } from "../helpers/dateHelpers/getCurrentDate.js";
 
 type CoordinatesArray = [string, string, string, string | null, string | null];
 
-export async function farmManager() {
+export async function farmManager(page: Page) {
   // const { page } = await setupBrowser();
   const { link_SPY_PROBE } = fleetStatistics;
   const actualDate = getCurrentDate();
@@ -39,7 +39,7 @@ export async function farmManager() {
           console.log(`${galaxy}:${system}:${planet} - Wysyłam 6000 sond szpiegowskich`);
 
           const numberOfProbes: number = 5000;
-          let flightDurationOneWay = await sendFleet(link_SPY_PROBE, numberOfProbes, galaxy, system, planet, stringSpy);
+          let flightDurationOneWay = await sendFleet(link_SPY_PROBE, numberOfProbes, galaxy, system, planet, stringSpy, page);
 
           await delay((flightDurationOneWay += 2000));
           await checkSpyMessages(index);

@@ -1,17 +1,14 @@
 import { ElementHandle, Page, HTTPResponse } from "puppeteer";
-import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { delay } from "../utils/delay.js";
 import { takeInnerText } from "../helpers/domHelpers/takeInnerText.js";
 import { timeStringToMilliseconds } from "../helpers/dateHelpers/timeStringToMilliseconds.js";
 import { checkSlotsOfFleet } from "../helpers/fleetHelpers/checkSlotsOfFleet.js";
 import { getRandomNumber } from "../helpers/randomHelpers/getRandomNumber.js";
 
-export async function sendFleet(shipElement: string, amountOfShips: number, numberOfgalaxy: string, numberOfSystem: string, numberOfPlanet: string, mission: string) {
+export async function sendFleet(shipElement: string, amountOfShips: number, numberOfgalaxy: string, numberOfSystem: string, numberOfPlanet: string, mission: string, page: Page) {
   let fleetPage: ElementHandle<HTMLAnchorElement> | null;
 
   try {
-    const { page } = await setupBrowser();
-
     if (page) {
       await page.waitForSelector("a[href='/fleet']");
       fleetPage = await page.$("a[href='/fleet']");
@@ -36,7 +33,7 @@ export async function sendFleet(shipElement: string, amountOfShips: number, numb
       console.log("Brak dostępnych statków!");
       return;
     } else {
-      await checkSlotsOfFleet();
+      await checkSlotsOfFleet(page);
 
       // Podaj ilość statków do wysłania
       const nextElementHandle: ElementHandle | null = await page.evaluateHandle((el) => el.nextElementSibling, selectShip);

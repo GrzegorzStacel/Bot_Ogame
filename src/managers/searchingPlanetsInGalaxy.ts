@@ -1,4 +1,4 @@
-import puppeteer, { ElementHandle, HTTPResponse } from "puppeteer";
+import { ElementHandle, HTTPResponse } from "puppeteer";
 import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { delay } from "../utils/delay.js";
 import { writeDataToJsonFile } from "../helpers/fileHelpers/writeDataToJsonFile.js";
@@ -28,7 +28,10 @@ export async function searchingPlanetsInGalaxy() {
   const galaxyInputElement: ElementHandle<Element> = await page.$(".galaxy-route #galaxyInput");
   const galaxyInputValue: string = await page.evaluate((input: HTMLInputElement) => input.value, galaxyInputElement);
 
-  for (let i = 0; i < 500; i++) {
+  // TODO dodać do wywołania pętle, która przeszukuje systemy "w górę", oraz "w dół"
+
+  // Przeszukiwanie więcej niż 30 systemów, i wysyłanie statków dalej, byłoby zbyt czasochłonne. Brakło by doby, aby do wszystkich znalezionych planet wysłać statki.
+  for (let i = 0; i < 30; i++) {
     try {
       let buttonToChangeSystem: ElementHandle<Element> = await page.$("#btnSystemRight");
 
@@ -73,5 +76,5 @@ function addCoordinatesToArray(array: string[][], galaxy: string, system: string
 
   // Dodajemy tablicę do głównej tablicy
   array.push(coordinates);
-  console.log("coordinates::: ", coordinates);
+  console.log("Planeta: ", coordinates);
 }
