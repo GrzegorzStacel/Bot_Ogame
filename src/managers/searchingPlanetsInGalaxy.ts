@@ -67,7 +67,7 @@ export async function searchingPlanetsInGalaxy() {
   }
 
   // Zapisz wyniki do pliku
-  await writeDataToJsonFile("../data/farmCoordinates.json", arrayWithCoordinatesToInactivePlanets);
+  await writeDataToJsonFile("src/data/farmCoordinates.json", arrayWithCoordinatesToInactivePlanets);
 }
 
 function addCoordinatesToArray(array: string[][], galaxy: string, system: string, position: string) {

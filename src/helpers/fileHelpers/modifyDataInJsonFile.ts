@@ -1,20 +1,12 @@
 import fs from "fs";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
 import { getCurrentDate } from "../dateHelpers/getCurrentDate.js";
 
 type JsonArray = [string, string, string, string | null, string | null];
 
 export async function modifyDataInJsonFile(filePathArg: string, indexActualArray: number, isSafe: string) {
   try {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
-
-    // Ścieżka do pliku JSON
-    const filePath = path.join(__dirname, filePathArg);
-
     // Wczytaj zawartość pliku JSON
-    const data = await fs.promises.readFile(filePath, "utf8");
+    const data = await fs.promises.readFile(filePathArg, "utf8");
     const jsonArray: JsonArray[] = JSON.parse(data);
 
     console.log(`Rozpoczynam modyfikowanie pliku JSON: ${jsonArray[indexActualArray]}`);
@@ -41,7 +33,7 @@ export async function modifyDataInJsonFile(filePathArg: string, indexActualArray
     }
 
     // Zapisz zmodyfikowany plik JSON
-    await fs.promises.writeFile(filePath, JSON.stringify(jsonArray, null, 2), "utf8");
+    await fs.promises.writeFile(filePathArg, JSON.stringify(jsonArray, null, 2), "utf8");
 
     console.log(`Plik JSON został zaktualizowany: ${jsonArray[indexActualArray]}`);
   } catch (error) {

@@ -1,18 +1,10 @@
 import fs from "fs/promises";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
 
 type DataItem = [string, string, string, string?, string?];
 
 export async function writeDataToJsonFile(filePathArg: string, arraywithData: Array<[string, string, string]>) {
   try {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
-
-    // Ścieżka do pliku JSON
-    const filePath = path.join(__dirname, filePathArg);
-
-    const existingData: string = await fs.readFile(filePath, "utf8").catch(() => "[]");
+    const existingData: string = await fs.readFile(filePathArg, "utf8").catch(() => "[]");
     const existingArray: DataItem[] = JSON.parse(existingData);
 
     // Utwórz mapę do szybkiego dostępu do istniejących danych
@@ -59,7 +51,7 @@ export async function writeDataToJsonFile(filePathArg: string, arraywithData: Ar
     });
 
     // Zapisz zaktualizowaną tablicę do pliku
-    await fs.writeFile(filePath, JSON.stringify(finalArray, null, 2));
+    await fs.writeFile(filePathArg, JSON.stringify(finalArray, null, 2));
 
     console.log(`Dane zostały zapisane do pliku: ${finalArray}`);
   } catch (error) {
