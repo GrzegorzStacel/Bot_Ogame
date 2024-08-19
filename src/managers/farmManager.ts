@@ -36,7 +36,7 @@ export async function farmManager(page: Page) {
 
       if (date !== actualDate || date === null) {
         if (isSafe === null || isSafe === stringSafe) {
-          console.log(`${galaxy}:${system}:${planet} - Wysyłam 6000 sond szpiegowskich`);
+          console.log(`${galaxy}:${system}:${planet} - Przygotowuję do wysłania 6000 sond szpiegowskich`);
 
           const numberOfProbes: number = 5000;
           let flightDurationOneWay = await sendFleet(link_SPY_PROBE, numberOfProbes, galaxy, system, planet, stringSpy, page);
