@@ -5,7 +5,6 @@ import { fileURLToPath } from "url";
 import { importantStrings } from "../config/settings.js";
 import { sendFleet } from "./sendFleet.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
-// import farmCoordinates from "../data/farmCoordinates.json" assert { type: "json" };
 import { checkSpyMessages } from "./checkSpyMessages.js";
 import { delay } from "../utils/delay.js";
 import { getCurrentDate } from "../helpers/dateHelpers/getCurrentDate.js";
@@ -13,7 +12,6 @@ import { getCurrentDate } from "../helpers/dateHelpers/getCurrentDate.js";
 type CoordinatesArray = [string, string, string, string | null, string | null];
 
 export async function farmManager(page: Page) {
-  // const { page } = await setupBrowser();
   const { link_SPY_PROBE } = fleetStatistics;
   const actualDate = getCurrentDate();
   const { stringSafe, stringDanger, stringSpy } = importantStrings;
