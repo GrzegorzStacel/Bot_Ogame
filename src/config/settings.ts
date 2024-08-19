@@ -16,3 +16,8 @@ export const importantStrings = {
   stringSpy: "Spy",
   stringAttack: "Attack",
 };
+
+export const navigationPaths = {
+  messagesPath: "a[href='/messages']",
+  fleetPath: "a[href='/fleet']",
+};
