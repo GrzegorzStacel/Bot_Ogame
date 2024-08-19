@@ -98,7 +98,8 @@ export async function sendFleet(shipElement: string, amountOfShips: number, numb
       return flightDurationOneWay;
     }
   } catch (error) {
-    console.error("Błąd w sendFleet.js: ", error);
+    console.error(`Wystąpił błąd: ${error.message}`);
+    console.error(`Szczegóły błędu: ${error.stack}`);
     return;
   }
 }
