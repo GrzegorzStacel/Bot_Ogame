@@ -23,7 +23,9 @@ export async function sendFleet(shipElement: string, amountOfShips: number, numb
       return;
     } else {
       // Podaj ilość statków do wysłania
-      const nextElementHandle: ElementHandle | null = await page.evaluateHandle((el) => el.nextElementSibling, selectShip);
+      const nextElementHandle: ElementHandle | null = await page.evaluateHandle((el) => {
+        return el?.nextElementSibling;
+      }, selectShip);
 
       if (nextElementHandle) {
         // Sprawdź, czy następny element rodzeństwa zawiera <input>
