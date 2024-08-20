@@ -4,24 +4,12 @@ import { takeInnerText } from "../helpers/domHelpers/takeInnerText.js";
 import { timeStringToMilliseconds } from "../helpers/dateHelpers/timeStringToMilliseconds.js";
 import { checkSlotsOfFleet } from "../helpers/fleetHelpers/checkSlotsOfFleet.js";
 import { getRandomNumber } from "../helpers/randomHelpers/getRandomNumber.js";
+import { navigationUtils } from "../utils/navigationUtils.js";
+import { navigationPaths } from "../config/settings.js";
 
 export async function sendFleet(shipElement: string, amountOfShips: number, numberOfgalaxy: string, numberOfSystem: string, numberOfPlanet: string, mission: string, page: Page) {
-  let fleetPage: ElementHandle<HTMLAnchorElement> | null;
-
   try {
-    if (page) {
-      await page.waitForSelector("a[href='/fleet']");
-      fleetPage = await page.$("a[href='/fleet']");
-
-      const navigationPromise: Promise<HTTPResponse> = page.waitForNavigation();
-
-      await fleetPage.click();
-
-      await navigationPromise;
-    } else {
-      console.log("Nie znaleziono przycisku z flotą!", fleetPage);
-      return;
-    }
+    await navigationUtils(navigationPaths.fleetPath);
 
     // Sprawdzam czy są dostępne statki, jeśli nie, wychodzę z funkcji
     await page.waitForSelector(shipElement);

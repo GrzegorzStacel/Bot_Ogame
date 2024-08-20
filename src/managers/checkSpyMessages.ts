@@ -6,6 +6,8 @@ import { delay } from "../utils/delay.js";
 import { fleetStatistics } from "../data/fleetStatistics.js";
 import { sendFleet } from "./sendFleet.js";
 import { modifyDataInJsonFile } from "../helpers/fileHelpers/modifyDataInJsonFile.js";
+import { navigationUtils } from "../utils/navigationUtils.js";
+import { navigationPaths } from "../config/settings.js";
 
 export async function checkSpyMessages(indexActualArray: number) {
   try {
@@ -18,18 +20,7 @@ export async function checkSpyMessages(indexActualArray: number) {
     const { stringSpy, stringAttack, stringDanger, stringSafe } = importantStrings;
 
     while (isDone) {
-      if (page) {
-        await page.waitForSelector("a[href='/messages']");
-        const messagesPage: ElementHandle<HTMLAnchorElement> | null = await page.$("a[href='/messages']");
-        const navigationPromise: Promise<HTTPResponse> = page.waitForNavigation();
-
-        await messagesPage.click();
-
-        await navigationPromise;
-      } else {
-        console.log("Nie weszliśmy do strony z wiadomościami!");
-        return;
-      }
+      await navigationUtils(navigationPaths.messagesPath);
 
       await page.waitForSelector(".message-head .head-left span a");
       const takeCoordinates = await takeInnerText(".message-head .head-left span a");

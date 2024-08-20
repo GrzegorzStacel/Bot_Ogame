@@ -1,6 +1,8 @@
 import { Page } from "puppeteer";
 import { takeInnerText } from "../domHelpers/takeInnerText.js";
 import { delay } from "../../utils/delay.js";
+import { navigationUtils } from "../../utils/navigationUtils.js";
+import { navigationPaths } from "../../config/settings.js";
 
 export async function checkSlotsOfFleet(page: Page): Promise<void> {
   try {

@@ -3,25 +3,13 @@ import { setupBrowser } from "../setupBrowser/setupBrowser.js";
 import { delay } from "../utils/delay.js";
 import { writeDataToJsonFile } from "../helpers/fileHelpers/writeDataToJsonFile.js";
 import { getRandomNumber } from "../helpers/randomHelpers/getRandomNumber.js";
+import { navigationUtils } from "../utils/navigationUtils.js";
+import { navigationPaths } from "../config/settings.js";
 
 export async function searchingPlanetsInGalaxy() {
   const { page } = await setupBrowser();
   const maxNumberOfSystem = 499;
-  let galaxyPage: ElementHandle<HTMLAnchorElement>;
-
-  if (page) {
-    galaxyPage = await page.$("a[href='/galaxy']");
-    const navigationPromise: Promise<HTTPResponse> = page.waitForNavigation();
-
-    await galaxyPage.click();
-
-    await navigationPromise;
-
-    await delay(getRandomNumber(2000, 3000));
-  } else {
-    console.log("Nie znaleziono przycisku z galaktyką!", galaxyPage);
-    return;
-  }
+  await navigationUtils(navigationPaths.galaxyPath);
 
   let arrayWithCoordinatesToInactivePlanets: [string, string, string][] = [];
 

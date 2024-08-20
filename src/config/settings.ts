@@ -20,4 +20,5 @@ export const importantStrings = {
 export const navigationPaths = {
   messagesPath: "a[href='/messages']",
   fleetPath: "a[href='/fleet']",
+  galaxyPath: "a[href='/galaxy']",
 };
