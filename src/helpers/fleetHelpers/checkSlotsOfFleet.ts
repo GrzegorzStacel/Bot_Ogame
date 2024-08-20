@@ -25,7 +25,7 @@ export async function checkSlotsOfFleet(page: Page): Promise<void> {
 
       await delay(remainingSeconds);
     } else {
-      console.log("Jest wolny slot. Można wysłać flotę.");
+      console.log(`Jest wolny slot. ( ${busySlots} z ${maxSlots} )`);
       return;
     }
   } catch (error) {
