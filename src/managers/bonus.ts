@@ -18,6 +18,7 @@ export async function bonus(): Promise<void> {
       console.log("Brak bonusa.");
     }
   } catch (error) {
-    console.error("Wystąpił błąd w bonus.js:", error);
+    console.error(`Wystąpił błąd w bonus.js: ${error.message}`);
+    console.error(`Szczegóły błędu w bonus.js: ${error.stack}`);
   }
 }

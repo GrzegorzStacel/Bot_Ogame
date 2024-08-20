@@ -50,7 +50,8 @@ export async function searchingPlanetsInGalaxy() {
         break;
       }
     } catch (error) {
-      console.error("Wystąpił błąd:", error);
+      console.error(`Wystąpił błąd w searchingPlanetInGalaxy.js: ${error.message}`);
+      console.error(`Szczegóły błędu w searchingPlanetInGalaxy.js: ${error.stack}`);
     }
   }
 

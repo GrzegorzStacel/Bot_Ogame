@@ -109,7 +109,8 @@ export async function checkSpyMessages(indexActualArray: number) {
       return;
     }
   } catch (error) {
-    console.error("Błąd w checkSpyMessages.js: ", error);
+    console.error(`Wystąpił błąd w checkSpyMessages.js: ${error.message}`);
+    console.error(`Szczegóły błędu w checkSpyMessages.js: ${error.stack}`);
     return;
   }
 }

@@ -29,8 +29,8 @@ export async function checkSlotsOfFleet(page: Page): Promise<void> {
       return;
     }
   } catch (error) {
-    console.error(`Wystąpił błąd: ${error.message}`);
-    console.error(`Szczegóły błędu: ${error.stack}`);
+    console.error(`Wystąpił błąd w checkSlotsOfFleet.js: ${error.message}`);
+    console.error(`Szczegóły błędu w checkSlotsOfFleet.js: ${error.stack}`);
   }
 }
 

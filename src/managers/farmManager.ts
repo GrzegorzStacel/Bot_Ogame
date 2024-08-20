@@ -57,6 +57,7 @@ export async function farmManager(page: Page) {
       // TODO sprawdzić czy są wolne sloty jeśli nie pobrać ilość czasu do powrotu statków
     }
   } catch (error) {
-    console.error("Błąd w farmManager.js: ", error);
+    console.error(`Wystąpił błąd w farmManager.js: ${error.message}`);
+    console.error(`Szczegóły błędu w farmManager.js: ${error.stack}`);
   }
 }

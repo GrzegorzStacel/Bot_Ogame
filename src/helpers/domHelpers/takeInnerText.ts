@@ -28,7 +28,7 @@ export async function takeInnerText(element: string, isSlice: boolean = false) {
 
     return text;
   } catch (error) {
-    console.error(`Wystąpił błąd: ${error.message}`);
-    console.error(`Szczegóły błędu: ${error.stack}`);
+    console.error(`Wystąpił błąd w takeInnerText.js: ${error.message}`);
+    console.error(`Szczegóły błędu w takeInnerText.js: ${error.stack}`);
   }
 }
