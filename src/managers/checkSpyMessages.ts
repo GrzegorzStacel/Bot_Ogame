@@ -72,6 +72,7 @@ export async function checkSpyMessages(indexActualArray: number) {
           if (sumOfAllResources < 500000000000) {
             console.log(`${cleanCoordinates[0]}:${cleanCoordinates[1]}:${cleanCoordinates[2]} - Za mało surowców aby się fatygować: ${sumOfAllResources.toLocaleString("pl-PL")}`);
             // TODO sprawdzić czy to nie jest nierozbudowana planeta (sprawdzić lvl storage's)
+            await modifyDataInJsonFile("src/data/farmCoordinates.json", indexActualArray, stringSafe);
             return;
           } else if (sumOfAllResources > 2000000000000) {
             numberOfAttacks = 6;
