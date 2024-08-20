@@ -10,6 +10,7 @@ import { navigationPaths } from "../config/settings.js";
 export async function sendFleet(shipElement: string, amountOfShips: number, numberOfgalaxy: string, numberOfSystem: string, numberOfPlanet: string, mission: string, page: Page) {
   try {
     await navigationUtils(navigationPaths.fleetPath);
+    await checkSlotsOfFleet(page);
 
     // Sprawdzam czy są dostępne statki, jeśli nie, wychodzę z funkcji
     await page.waitForSelector(shipElement);
@@ -21,8 +22,6 @@ export async function sendFleet(shipElement: string, amountOfShips: number, numb
       console.log("Brak dostępnych statków!");
       return;
     } else {
-      await checkSlotsOfFleet(page);
-
       // Podaj ilość statków do wysłania
       const nextElementHandle: ElementHandle | null = await page.evaluateHandle((el) => el.nextElementSibling, selectShip);
 
